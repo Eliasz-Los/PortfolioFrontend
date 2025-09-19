@@ -1,0 +1,32 @@
+/*.navbar {
+  background-color: white !important;
+}
+
+.navbar-brand img {
+  height: 40px;
+}
+
+.nav-link {
+  color: black !important;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-link.active-tab {
+  border-bottom: 2px solid #dc3545;
+}
+
+.nav-link:hover {
+  color: #dc3545 !important;
+}
+
+.btn-red {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+.btn-red:hover {
+  background-color: #b22222;
+}*/
+

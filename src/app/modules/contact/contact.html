@@ -1,0 +1,37 @@
+<p>contact works!</p>
+<div class="container py-5">
+  <h2 class="mb-4 text-center">Contact Me</h2>
+  <div class="row justify-content-center">
+    <!-- GitHub Card -->
+    <div class="col-md-3 mb-3">
+      <div class="card text-center shadow contact-card">
+        <div class="card-body">
+          <i class="fab fa-github fa-3x mb-2"></i>
+          <h5 class="card-title">GitHub</h5>
+          <a href="https://github.com/Eliasz-Los" target="_blank" class="btn btn-dark w-100">View Profile</a>
+        </div>
+      </div>
+    </div>
+    <!-- LinkedIn Card -->
+    <div class="col-md-3 mb-3">
+      <div class="card text-center shadow contact-card">
+        <div class="card-body">
+          <i class="fab fa-linkedin fa-3x mb-2" style="color:#0077b5"></i>
+          <h5 class="card-title">LinkedIn</h5>
+          <a href="https://www.linkedin.com/in/eliasz-%C5%82o%C5%9B-72843a22a" target="_blank" class="btn btn-primary w-100">Connect</a>
+        </div>
+      </div>
+    </div>
+    <!-- Email Card -->
+    <div class="col-md-3 mb-3">
+      <div class="card text-center shadow contact-card">
+        <div class="card-body">
+          <i class="fas fa-envelope fa-3x mb-2" style="color:#d44638"></i>
+          <h5 class="card-title">Email</h5>
+          <button class="btn btn-danger w-100" (click)="copyEmail()">Copy Email</button>
+          <div [@if]="emailCopied" class="mt-2 text-success">Copied!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

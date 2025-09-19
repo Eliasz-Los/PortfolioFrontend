@@ -1,0 +1,21 @@
+@if (floorplans != null) {
+  <div class="container mt-4">
+    <div class="row">
+      @for (floorplan of floorplans; track floorplan){
+        <div
+          class="col-md-4 mb-3"
+          (click)="onFloorplanClick(floorplan)"
+          style="cursor: pointer; border: 1px solid #ccc; border-radius: 8px; padding: 10px;"
+        >
+          <h5>{{ floorplan.name }} (Floor {{ floorplan.floorNumber }})</h5>
+          <img src="/floor_images/{{floorplan.image}}" [alt]="floorplan.name" style="width: 100%; height: auto;"/>
+          <p>Scale: {{ floorplan.scale }}</p>
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="text-center mt-4">
+    <span>Loading floorplans...</span>
+  </div>
+}
