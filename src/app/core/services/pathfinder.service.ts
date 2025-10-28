@@ -3,6 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../env/environment';
 import {Observable} from 'rxjs';
 import {Floorplan} from '../models/Floorplan';
+import {PathRequest} from '../models/PathRequest';
+import {Point} from '../models/Point';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +18,8 @@ export class PathfinderService {
     return this.http.get<Floorplan[]>(`${this.apiUrl}/Floorplan/floorplans`);
   }
 
-  // getRouteForFloorplan(floorplanId: string, start: string, end: string): Observable<string[]> {
+  getRouteForFloorplan(pathReq: PathRequest): Observable<Point[]> {
+    return this.http.post<Point[]>(`${this.apiUrl}/path/route`, pathReq);
+  }
 
 }

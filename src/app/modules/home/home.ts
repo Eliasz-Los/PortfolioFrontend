@@ -2,20 +2,23 @@ import { Component } from '@angular/core';
 import {Floorplan} from '../../core/models/Floorplan';
 import {PathfinderService} from '../../core/services/pathfinder.service';
 import {Router} from '@angular/router';
-import {NgOptimizedImage} from '@angular/common';
+import {NgIf, NgOptimizedImage} from '@angular/common';
+import {FloorplanViewer} from '../../shared/components/floorplan-viewer/floorplan-viewer';
 
 @Component({
   selector: 'app-home',
   imports: [
-    NgOptimizedImage
+    NgOptimizedImage,
+    FloorplanViewer,
+    NgIf
   ],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
 export class Home {
   floorplans: Floorplan[] | undefined;
+  selectedFloorplan: Floorplan | null = null;
 
-//TODO make it after that each person can click on the floorplan and choose begin adnd end point to get the best path
 
   constructor(
     private pathfinderService: PathfinderService,
@@ -34,6 +37,14 @@ export class Home {
   }
 
   onFloorplanClick(floorplan: Floorplan) {
-  //TODO: mamking it interactive
+    this.selectedFloorplan = floorplan;
   }
+
+  onViewerClose() {
+    this.selectedFloorplan = null;
+  }
+
+  /*trackByFloorplanId(index: number, floorplan: Floorplan): number {
+    return floorplan.;
+  }*/
 }

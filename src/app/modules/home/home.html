@@ -17,5 +17,14 @@
 } @else {
   <div class="text-center mt-4">
     <span>Loading floorplans...</span>
+
   </div>
 }
+
+@if (selectedFloorplan){
+  <app-floorplan-viewer
+    [floorplan]="selectedFloorplan"
+    (close)="onViewerClose()"/>
+}
+
+
