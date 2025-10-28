@@ -5,6 +5,7 @@ import {PathfinderService} from '../../../core/services/pathfinder.service';
 import {PathRequest} from '../../../core/models/PathRequest';
 import {NgStyle} from '@angular/common';
 
+//TODO perhaps lets split some of the logic for better maintainability
 @Component({
   selector: 'app-floorplan-viewer',
   imports: [
@@ -48,10 +49,18 @@ export class FloorplanViewer {
     if (!img) return;
     const rect = img.getBoundingClientRect();
 
-    const XWidth = event.clientX - rect.left;
-    const YHeight = event.clientY - rect.top;
+    // Get click position relative to displayed image
+    const xDisplay = event.clientX - rect.left;
+    const yDisplay = event.clientY - rect.top;
 
-    const point: Point = { XWidth, YHeight };
+    // Scale to actual image pixel resolution
+    const scaleX = img.naturalWidth / rect.width;
+    const scaleY = img.naturalHeight / rect.height;
+
+    const xWidth = xDisplay * scaleX;
+    const yHeight = yDisplay * scaleY;
+
+    const point: Point = { xWidth, yHeight };
 
     if (this.points.length === 0) {
       this.points.push(point);
@@ -60,26 +69,26 @@ export class FloorplanViewer {
     } else {
       this.points[1] = point;
     }
+
+    console.log({ clickY: event.clientY, rectTop: rect.top, yDisplay, yHeight });
   }
 
   markerStyle(p: Point) {
     const img = this.imageRef?.nativeElement;
-    if (!img) return {};
+    if (!img || img.width === 0 || img.height === 0) return {};
 
-    const left = Math.max(0, Math.min(100, (p.XWidth / img.width) * 100));
-    const top  = Math.max(0, Math.min(100, (p.YHeight / img.height) * 100));
+    const { scaleX, scaleY } = this.scaleXandY();
 
-    return {
-      left: `${left}%`,
-      top: `${top}%`
-    };
+    const left = Math.max(0, Math.min(100, (p.xWidth * scaleX / img.clientWidth) * 100));
+    const top  = Math.max(0, Math.min(100, (p.yHeight * scaleY / img.clientHeight) * 100));
+
+    return { left: `${left}%`, top: `${top}%` };
   }
 
-/*api call to get the right routePoints t odraw from a to b*/
+/*api call to get the right route consisted of a list of points  to draw from a to b*/
   getRoute() {
     if (this.floorplan && this.points.length === 2) {
-      console.log('Points:', this.points);
-      console.log('Marker style:', this.markerStyle(this.points[0]));
+
       const pathReq: PathRequest = {
         floorplanName: this.floorplan.name,
         floorNumber: this.floorplan.floorNumber,
@@ -90,9 +99,6 @@ export class FloorplanViewer {
       this.service.getRouteForFloorplan(pathReq).subscribe({
         next: (data) => {
           this.routePoints = data;
-          console.log(this.routePoints);
-
-
           console.log('routePoints count (display coords):', this.routePoints.length);
         },
         error: (error) => {
@@ -103,32 +109,33 @@ export class FloorplanViewer {
   }
 
 
-/*TODO: finite doesnt seem to help to get the points being drawn perhaps other lib or another method instead of svg*/
   getSvgViewBox(): string {
     const img = this.imageRef?.nativeElement;
     if (!img) return '0 0 0 0';
     return `0 0 ${img.width} ${img.height}`;
   }
 
- /* getPolylinePoints(): string {
-  // join display coordinates as "x,y x,y ..." for the svg polyline
-  return this.routePoints
-    .map(p => `${p.XWidth},${p.YHeight}`)
-    .join(' ');
-  }*/
-  // returns empty string if route is not valid (safe for [attr.points])
   getPolylinePoints(): string {
-    if (!this.routePoints || this.routePoints.length === 0) return '';
-    // ensure each point has finite numbers
-    const ok = this.routePoints.every(p =>
-      p && isFinite(Number(p.XWidth)) && isFinite(Number(p.YHeight))
-    );
-    if (!ok) return '';
-    return this.routePoints.map(p => `${Number(p.XWidth)},${Number(p.YHeight)}`).join(' ');
+    const img = this.imageRef?.nativeElement;
+    if (!img || !this.routePoints?.length) return '';
+
+    const { scaleX, scaleY } = this.scaleXandY();
+
+    return this.routePoints
+      .map(p => `${p.xWidth * scaleX},${p.yHeight * scaleY}`)
+      .join(' ')
   }
 
   hasRoute(): boolean {
     return this.routePoints.length > 0;
+  }
+
+  scaleXandY(): {scaleX: number, scaleY: number} {
+    const img = this.imageRef?.nativeElement;
+
+    const scaleX = img!.clientWidth / img!.naturalWidth;
+    const scaleY = img!.clientHeight / img!.naturalHeight;
+    return { scaleX, scaleY };
   }
 
 
