@@ -1,9 +1,9 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {NgStyle} from '@angular/common';
-import {Floorplan} from '../../../core/models/hospital/Floorplan';
-import {Point} from '../../../core/models/hospital/Point';
+import {Floorplan} from '../../../core/models/pathfinder/Floorplan';
+import {Point} from '../../../core/models/pathfinder/Point';
 import {PathfinderService} from '../../../core/services/pathfinder.service';
-import {PathRequest} from '../../../core/models/hospital/PathRequest';
+import {PathRequest} from '../../../core/models/pathfinder/PathRequest';
 
 
 @Component({
