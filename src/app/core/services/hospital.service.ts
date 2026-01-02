@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../../env/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Floorplan} from '../models/Floorplan';
-import {PathRequest} from '../models/PathRequest';
-import {Point} from '../models/Point';
+import {Floorplan} from '../models/hospital/Floorplan';
+import {PathRequest} from '../models/hospital/PathRequest';
+import {Point} from '../models/hospital/Point';
 
 @Injectable({
   providedIn: 'root'

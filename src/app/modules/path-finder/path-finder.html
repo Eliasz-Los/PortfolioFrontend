@@ -6,6 +6,7 @@
           class="col-md-4 mb-3"
           (click)="onFloorplanClick(floorplan)"
           style="cursor: pointer; border: 1px solid #ccc; border-radius: 8px; padding: 10px;"
+          data-aos="fade-up"
         >
           <h5>{{ floorplan.name }} (Floor {{ floorplan.floorNumber }})</h5>
           <img src="/floor_images/{{floorplan.image}}" [alt]="floorplan.name" style="width: 100%; height: auto;"/>

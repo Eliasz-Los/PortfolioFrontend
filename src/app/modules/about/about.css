@@ -1,0 +1,64 @@
+.about-section {
+  max-width: 900px;
+  margin: 80px auto;
+  padding: 0 20px;
+}
+
+.about-section h2,
+.about-section h3 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.about-section p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #444;
+}
+
+.tech-lists {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.tech-list {
+  list-style: none;
+  padding: 25px 30px;
+  border-radius: 16px;
+  min-width: 260px;
+  font-weight: 500;
+}
+
+.tech-list li {
+  margin: 10px 0;
+}
+
+
+.backend {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.frontend {
+  background: linear-gradient(135deg, #43cea2, #185a9d);
+  color: white;
+}
+
+.sql {
+  background: linear-gradient(135deg, #f7971e, #ffd200);
+  color: #222;
+}
+
+.nosql {
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+  color: white;
+}
+
+.cta-section {
+  text-align: center;
+  margin: 120px 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
