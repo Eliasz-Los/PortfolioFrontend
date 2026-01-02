@@ -13,7 +13,7 @@
 
       }
       @if (points.length > 1) {
-      <div class="fp-marker fp-marker-end" [ngStyle]="markerStyle(points[1])"> </div>
+        <div class="fp-marker fp-marker-end" [ngStyle]="markerStyle(points[1])"> </div>
       }
 
       @if (points.length == 2) {
@@ -41,7 +41,7 @@
 
 
       <div class="fp-legend" (click)="$event.stopPropagation()">
-<!--        <img src="/logo.png" alt="logo" class="fp-legend-logo" />-->
+        <!--        <img src="/logo.png" alt="logo" class="fp-legend-logo" />-->
         <div class="fp-legend-text">
           <div class="fp-legend-title">How it works</div>
           <div class="fp-legend-subtitle">First click is the start, green point</div>

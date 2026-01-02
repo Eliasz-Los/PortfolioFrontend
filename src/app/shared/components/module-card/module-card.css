@@ -1,0 +1,32 @@
+.module-card {
+  width: 360px;
+  height: 220px;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.module-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay h2 {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 600;
+}

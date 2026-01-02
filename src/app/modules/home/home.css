@@ -1,0 +1,41 @@
+.home-container {
+  height: calc(100vh - 80px); /* minus navbar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pathfinder-card {
+  width: 420px;
+  height: 260px;
+  background-image: url('/pathfinder-preview.jpg'); /* put image in /public */
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pathfinder-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay h1 {
+  color: white;
+  font-size: 2.2rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}

@@ -1,20 +1,18 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {NgStyle} from '@angular/common';
 import {Floorplan} from '../../../core/models/Floorplan';
 import {Point} from '../../../core/models/Point';
 import {PathfinderService} from '../../../core/services/pathfinder.service';
 import {PathRequest} from '../../../core/models/PathRequest';
-import {NgStyle} from '@angular/common';
 
-//TODO perhaps lets split some of the logic for better maintainability
+
 @Component({
-  selector: 'app-floorplan-viewer',
-  imports: [
-    NgStyle
-  ],
+  selector: 'floorplan-viewer',
+  imports: [NgStyle],
   templateUrl: './floorplan-viewer.html',
   styleUrl: './floorplan-viewer.css'
 })
-export class FloorplanViewer {
+export class FloorplanViewerComponent {
   @Input() floorplan: Floorplan | null = null;
   @Output() close = new EventEmitter<void>();
   points: Point[] = [];
@@ -85,7 +83,7 @@ export class FloorplanViewer {
     return { left: `${left}%`, top: `${top}%` };
   }
 
-/*api call to get the right route consisted of a list of points  to draw from a to b*/
+  /*api call to get the right route consisted of a list of points  to draw from a to b*/
   getRoute() {
     if (this.floorplan && this.points.length === 2) {
 
@@ -137,6 +135,4 @@ export class FloorplanViewer {
     const scaleY = img!.clientHeight / img!.naturalHeight;
     return { scaleX, scaleY };
   }
-
-
 }
