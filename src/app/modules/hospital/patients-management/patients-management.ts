@@ -58,9 +58,15 @@ export class PatientsManagement {
     this.currentPage = page;
   }
 
-
+  addPatient(): void {
+    this.router.navigate(['hospital/patients/add']);
+  }
 
   viewPatient(id: string) {
-    this.router.navigate(['/hospital/patients', id]);
+    this.router.navigate(['hospital/patients', id]);
+  }
+
+  returnToHospitalDashboard() {
+    this.router.navigate(['hospital']);
   }
 }

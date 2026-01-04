@@ -8,6 +8,7 @@ import {PatientsManagement} from './modules/hospital/patients-management/patient
 import {DoctorsManagement} from './modules/hospital/doctors-management/doctors-management';
 import {AppointmentScheduler} from './modules/hospital/appointment-scheduler/appointment-scheduler';
 import {PatientDetails} from './modules/hospital/patients-management/patient-details/patient-details';
+import {AddPatientComponent} from './modules/hospital/patients-management/add-patient/add-patient';
 
 export const routes: Routes = [
   {path:'', component: Home, pathMatch: 'full'},
@@ -16,6 +17,7 @@ export const routes: Routes = [
   {path: 'pathfinder', component: PathFinder, pathMatch: 'full'},
   {path: 'hospital', component: Hospital, pathMatch: 'full'},
   {path: 'hospital/patients', component: PatientsManagement, pathMatch: 'full'},
+  { path: 'hospital/patients/add', component: AddPatientComponent, pathMatch: 'full' },
   { path: 'hospital/patients/:id', component: PatientDetails, pathMatch: 'full' },
   {path: 'hospital/doctors', component: DoctorsManagement, pathMatch: 'full'},
   {path: 'hospital/appointments', component: AppointmentScheduler, pathMatch: 'full'},

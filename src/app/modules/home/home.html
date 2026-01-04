@@ -1,10 +1,14 @@
-<div class="col-md align-content-center">
-  @for(module of modules; track module){
-    <app-module-card
-      [title]="module.title"
-      [image]="module.image"
-      [route]="module.route">
-    </app-module-card>
-  }
+<div class="container my-4">
+  <div class="row justify-content-center g-3">
+    @for(module of modules; track module) {
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
+        <app-module-card
+          [title]="module.title"
+          [image]="module.image"
+          [route]="module.route">
+        </app-module-card>
+      </div>
+    }
+  </div>
 </div>
 
