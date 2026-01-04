@@ -1,9 +1,11 @@
+/*
 .home-container {
-  height: calc(100vh - 80px); /* minus navbar */
+  height: calc(100vh - 80px); !* minus navbar *!
   display: flex;
   justify-content: center;
   align-items: center;
 }
+*/
 
 .overlay {
   position: absolute;

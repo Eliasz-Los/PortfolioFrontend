@@ -1,32 +1,16 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {PatientDto} from '../../../../core/models/hospital/PatientDto';
 import {PatientService} from '../../../../core/services/hospital/patient.service';
 import {Observable, switchMap} from 'rxjs';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {
-  MatCard,
-  MatCardActions,
-  MatCardContent,
-  MatCardHeader,
-  MatCardSubtitle,
-  MatCardTitle
-} from '@angular/material/card';
 import {AsyncPipe} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
-import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-patient-details',
   imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardSubtitle,
-    MatCardContent,
-    MatCardActions,
     AsyncPipe,
     MatIconModule,
-    MatButton,
     RouterLink,
   ],
   templateUrl: './patient-details.html',
@@ -34,15 +18,41 @@ import {MatButton} from '@angular/material/button';
 })
 export class PatientDetails {
   patient : Observable<PatientDto>;
+  patientId!: string;
+  showDeleteModal = false;
 
   constructor(private patientService : PatientService,
-              private route: ActivatedRoute)
+              private route: ActivatedRoute,
+              private router: Router)
   {
     this.patient = this.route.paramMap.pipe(
       switchMap(params => {
         return this.patientService.getById(params.get('id')!);
       })
     );
+  }
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.patientId = params.get('id')!;
+    });
+  }
+
+  openDeleteModal(): void {
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
+  }
+
+  confirmDelete(): void {
+    this.patientService.delete(this.patientId).subscribe({
+      next: () => {
+        this.showDeleteModal = false;
+        this.router.navigate(['/hospital/patients']);
+      }
+    });
   }
 
 }

@@ -25,13 +25,8 @@ import {Router} from '@angular/router';
 export class PatientsManagement {
   patients: Observable<PatientDto[]>;
 
-  displayedColumns: string[] = [
-    'fullName',
-    'dateOfBirth',
-    'email',
-    'phoneNumber',
-    'actions'
-  ];
+  currentPage = 1;
+  pageSize = 20;
 
   constructor(private patientService: PatientService,
               private router: Router)
@@ -39,15 +34,33 @@ export class PatientsManagement {
     this.patients = this.patientService.getAll();
   }
 
-  viewPatient(id: string) {
-    this.router.navigate(['/hospital/patients', id]);
+  ngOnInit(): void {
+    this.patients.subscribe(patients => {
+      this.patientsSnapshot = patients;
+    });
   }
 
-  deletePatient(id: string) {
-    if (confirm('Are you sure you want to delete this patient?')) {
-      this.patientService.delete(id).subscribe(() => {
-        this.patients = this.patientService.getAll();
-      });
-    }
+  get paginatedPatients(): PatientDto[] {
+    const patients = this.patientsSnapshot ?? [];
+    const start = (this.currentPage - 1) * this.pageSize;
+    return patients.slice(start, start + this.pageSize);
+  }
+
+  patientsSnapshot: PatientDto[] = [];
+
+  get totalPages(): number[] {
+    const total = Math.ceil(this.patientsSnapshot.length / this.pageSize);
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages.length) return;
+    this.currentPage = page;
+  }
+
+
+
+  viewPatient(id: string) {
+    this.router.navigate(['/hospital/patients', id]);
   }
 }
