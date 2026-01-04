@@ -1,0 +1,15 @@
+.full-width {
+  width: 100%;
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+mat-icon {
+  font-size: 20px;
+}

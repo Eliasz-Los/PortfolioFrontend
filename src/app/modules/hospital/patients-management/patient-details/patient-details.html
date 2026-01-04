@@ -1,0 +1,80 @@
+@if (patient | async; as patient) {
+  <div class="page">
+
+    <!-- Back button -->
+    <button mat-button color="primary" routerLink="/hospital/patients">
+      <mat-icon>arrow_back</mat-icon>
+      Back to patients
+    </button>
+
+    <!-- Main patient card -->
+    <mat-card class="patient-card">
+
+      <mat-card-header>
+        <mat-card-title>
+          {{ patient.fullName.firstName }} {{ patient.fullName.lastName }}
+        </mat-card-title>
+
+      </mat-card-header>
+
+      <mat-card-content>
+
+        <!-- Personal info -->
+        <section class="section">
+          <h3>Personal information</h3>
+
+          <div class="row">
+            <span class="label">Date of birth</span>
+            <span>{{ patient.dateOfBirth}}</span>
+          </div>
+
+          <div class="row">
+            <span class="label">Email</span>
+            <span>{{ patient.email }}</span>
+          </div>
+
+          <div class="row">
+            <span class="label">Phone</span>
+            <span>{{ patient.phoneNumber }}</span>
+          </div>
+        </section>
+
+        <!-- Location -->
+        <section class="section">
+          <h4>Address</h4>
+
+          <div class="row">
+            <span class="label">Street</span>
+            <span>{{ patient.location.streetName }}</span>
+          </div>
+
+          <div class="row">
+            <span class="label">City</span>
+            <span>{{ patient.location.city }}</span>
+          </div>
+
+          <div class="row">
+            <span class="label">Postal code</span>
+            <span>{{ patient.location.postalCode }}</span>
+          </div>
+
+          <div class="row">
+            <span class="label">Country</span>
+            <span>{{ patient.location.country }}</span>
+          </div>
+        </section>
+
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-stroked-button color="primary">
+          Edit patient
+        </button>
+        <button mat-stroked-button color="warn">
+          Delete patient
+        </button>
+      </mat-card-actions>
+
+    </mat-card>
+  </div>
+}

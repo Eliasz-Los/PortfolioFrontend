@@ -1,0 +1,10 @@
+<!--<img ngSrc="/under-construction.jpg" alt="Under Construction" height="425" width="474"/>-->
+<div class="home-container">
+  @for(module of modules; track module){
+    <app-module-card
+      [title]="module.title"
+      [image]="module.image"
+      [route]="module.route">
+    </app-module-card>
+  }
+</div>
