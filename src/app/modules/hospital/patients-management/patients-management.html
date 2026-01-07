@@ -1,22 +1,30 @@
-<div class="container my-2">
+<div class="container my-4">
 
   <div class="card shadow-sm">
     <div class="card-header">
-      <h5 class="mb-0">Patients</h5>
-      <button class="btn btn-info m-2 align-content-start"
+      <div class="d-flex align-items-center w-100">
+        <button class="btn btn-info"
               (click)="returnToHospitalDashboard()"
-      >
-        <i class="bi bi-house-door-fill me-1"></i>
-        Hospital Dashboard
-      </button>
+        >
+          <i class="bi bi-house-door-fill me-1"></i>
+          Dashboard
+        </button>
 
-      <button
-        class="btn btn-primary m-2 align-content-end"
-        (click)="addPatient()"
-      >
-        <i class="bi bi-plus-lg me-1"></i>
-        Add patient
-      </button>
+        <h5 class="flex-grow-1 text-center mb-0">Patients</h5>
+
+        <div class="ms-2">
+          <button
+            class="btn btn-primary"
+            (click)="addPatient()"
+          >
+            <i class="bi bi-plus-lg me-1"></i>
+             Patient
+          </button>
+        </div>
+    </div>
+
+
+
     </div>
 
     <div class="table-responsive">
