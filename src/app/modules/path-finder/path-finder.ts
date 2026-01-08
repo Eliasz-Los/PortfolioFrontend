@@ -1,8 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {NgStyle} from '@angular/common';
-import {PathRequest} from '../../core/models/hospital/PathRequest';
-import {Floorplan} from '../../core/models/hospital/Floorplan';
-import {Point} from '../../core/models/hospital/Point';
+import {Floorplan} from '../../core/models/pathfinder/Floorplan';
 import {PathfinderService} from '../../core/services/pathfinder.service';
 import {Router} from '@angular/router';
 import {FloorplanViewerComponent} from './floorplan-viewer/floorplan-viewer';

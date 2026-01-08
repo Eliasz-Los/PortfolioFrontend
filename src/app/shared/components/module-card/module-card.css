@@ -1,14 +1,15 @@
 .module-card {
+/*  width: 100%;
+  max-width: 360px;*/
   width: 360px;
   height: 220px;
   border-radius: 20px;
   background-size: cover;
   background-position: center;
   cursor: pointer;
-  position: relative;
+  position: static !important;
   box-shadow: 0 10px 30px rgba(0,0,0,0.25);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin: 20px;
 }
 
 .module-card:hover {

@@ -1,0 +1,41 @@
+@let errors = control?.errors;
+@if (control?.touched && control?.invalid) {
+  <div class="text-danger small mt-1">
+
+    @if (errors?.['required']) {
+      <div>This field is required</div>
+    }
+
+    @if (errors?.['email']) {
+      <div>Invalid email address</div>
+    }
+
+    @if (errors?.['minlength']) {
+      <div>
+        Minimum {{ minlengthError?.requiredLength }}
+        characters (got {{ minlengthError?.actualLength }})
+      </div>
+    }
+
+    @if (errors?.['forbiddenName']) {
+      <div>This name is not allowed</div>
+    }
+
+    @if (errors?.['locationRequired']) {
+      <div>Location is required</div>
+    }
+
+    @if (errors?.['phoneInvalid']) {
+      <div>Invalid phone number format</div>
+    }
+
+    @if (errors?.['invalidDate']) {
+      <div>Invalid date format</div>
+    }
+
+    @if (errors?.['minAge']) {
+      <div>Patient must be at least 12 years old</div>
+    }
+
+  </div>
+}
