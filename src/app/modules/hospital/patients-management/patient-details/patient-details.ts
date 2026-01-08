@@ -5,6 +5,7 @@ import {Observable, switchMap} from 'rxjs';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {AsyncPipe} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
+import {PatientInvoices} from '../patient-invoices/patient-invoices';
 
 @Component({
   selector: 'app-patient-details',
@@ -12,6 +13,7 @@ import {MatIconModule} from '@angular/material/icon';
     AsyncPipe,
     MatIconModule,
     RouterLink,
+    PatientInvoices,
   ],
   templateUrl: './patient-details.html',
   styleUrl: './patient-details.css'
