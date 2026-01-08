@@ -1,17 +1,29 @@
 import { Component } from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import {PatientService} from '../../../../core/services/hospital/patient.service';
 import {AddPatientDto} from '../../../../core/models/hospital/AddPatientDto';
+import {CommonModule} from '@angular/common';
+import {Name} from '../../../../core/models/hospital/types/Name';
+import {Location} from '../../../../core/models/hospital/types/Location';
+import {FormErrorsComponent} from '../../../../shared/components/form-errors/form-errors.component';
+import {
+  dateOfBirthValidator,
+  forbiddenNameValidator,
+  nameValidator,
+  phoneNumberValidator
+} from '../../../../shared/validators';
 
 @Component({
   selector: 'app-add-patient',
   standalone: true,
   imports: [
-    ReactiveFormsModule
+    CommonModule,
+    ReactiveFormsModule,
+    FormErrorsComponent
   ],
   templateUrl: './add-patient.html',
-  styleUrl: './add-patient.css'
+  styleUrls: ['./add-patient.css']
 })
 export class AddPatientComponent {
   form!: FormGroup;
@@ -25,32 +37,34 @@ export class AddPatientComponent {
   ngOnInit(): void {
     this.form = this.fb.group({
       fullName: this.fb.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required]
+        firstName: new FormControl('', { nonNullable: true, validators: [nameValidator(2, forbiddenNameValidator(/bob/i))] }),
+        lastName: new FormControl('', { nonNullable: true, validators: [nameValidator(2)] }),
       }),
 
-      dateOfBirth: ['', Validators.required],
+      dateOfBirth: new FormControl('', {
+        validators: [Validators.required, dateOfBirthValidator(0)]
+      }),
 
-      email: ['', [Validators.required, Validators.email]],
+      email: new FormControl('', { validators: [Validators.required, Validators.email] }),
 
-      phoneNumber: ['', Validators.required],
+      phoneNumber: new FormControl('', { validators: [Validators.required, phoneNumberValidator()] }),
 
       location: this.fb.group({
-        streetName: ['', Validators.required],
-        streetNumber: [0, Validators.required],
-        city: ['', Validators.required],
-        postalCode: ['', Validators.required],
-        country: ['', Validators.required]
+        streetName: [''],
+        streetNumber: [''],
+        city: new FormControl('', Validators.required),
+        postalCode: [''],
+        country: ['', Validators.required],
       })
     });
   }
 
   private mapToAddPatientDto(): {
-    fullName: { firstName: string; lastName: string };
+    fullName: Name;
     dateOfBirth: string;
     email: string;
     phoneNumber: string;
-    location: { streetName: string; streetNumber: number; city: string; postalCode: string; country: string }
+    location: Location;
   } {
     const formValue = this.form.value;
 
@@ -59,7 +73,7 @@ export class AddPatientComponent {
         firstName: formValue.fullName!.firstName!,
         lastName: formValue.fullName!.lastName!
       },
-      dateOfBirth: formValue.dateOfBirth!,
+      dateOfBirth: formValue.dateOfBirth ? formValue.dateOfBirth.slice(0,10) : null,
       email: formValue.email!,
       phoneNumber: formValue.phoneNumber!,
       location: {
@@ -75,10 +89,18 @@ export class AddPatientComponent {
 
 
   submit(): void {
-    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
-    const dto: AddPatientDto = this.mapToAddPatientDto();
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const dto = this.mapToAddPatientDto();
+
     this.patientService.create(dto).subscribe({
-      next: () => this.router.navigate(['/hospital/patients']),
+      next: () => {
+        console.log("Patient created successfully, " + JSON.stringify(dto));
+        this.router.navigate(['/hospital/patients'])
+      },
       error: (err) => console.error('Error creating patient:', err)
     });
   }

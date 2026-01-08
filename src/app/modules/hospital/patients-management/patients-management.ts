@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import {Router} from '@angular/router';
+import {LoadingComponent} from '../../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-patients-management',
@@ -17,12 +18,14 @@ import {Router} from '@angular/router';
     CommonModule,
     MatTableModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    LoadingComponent
   ],
   templateUrl: './patients-management.html',
   styleUrl: './patients-management.css'
 })
 export class PatientsManagement {
+  isLoading = true;
   patients: Observable<PatientDto[]>;
 
   currentPage = 1;
@@ -37,6 +40,7 @@ export class PatientsManagement {
   ngOnInit(): void {
     this.patients.subscribe(patients => {
       this.patientsSnapshot = patients;
+      this.isLoading = false;
     });
   }
 
