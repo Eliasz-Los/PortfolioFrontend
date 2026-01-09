@@ -5,6 +5,6 @@ import {Location} from './types/Location';
 export interface DoctorDto {
   id: string;
   fullName: Name;
-  specialisation: Specialisation;
+  specialisation: string;
   workAddress: Location;
 }

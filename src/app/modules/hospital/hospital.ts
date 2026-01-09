@@ -5,7 +5,6 @@ import {ModuleCardComponent} from '../../shared/components/module-card/module-ca
 @Component({
   selector: 'app-hospital',
   imports: [
-    NgOptimizedImage,
     ModuleCardComponent
   ],
   templateUrl: './hospital.html',
@@ -21,12 +20,12 @@ export class Hospital {
     {
       title: 'Doctor Management',
       image: '/doctors-module.jpg',
-      route: '/doctors'
+      route: '/hospital/doctors'
     },
     {
       title: 'Appointment Scheduling',
       image: '/appointments-module.jpg',
-      route: '/appointments'
+      route: '/hospital/appointments'
     }
 
   ];
