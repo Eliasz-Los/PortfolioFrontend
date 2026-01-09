@@ -78,6 +78,8 @@
 
     </div>
   </div>
+
+  <app-patient-invoices [patientId]="patientId"></app-patient-invoices>
 }
 
 @if (showDeleteModal) {
@@ -124,7 +126,9 @@
       </div>
     </div>
   </div>
+
 }
+
 
 
 @if (showDeleteModal){
