@@ -4,11 +4,12 @@ import {Floorplan} from '../../../core/models/pathfinder/Floorplan';
 import {Point} from '../../../core/models/pathfinder/Point';
 import {PathfinderService} from '../../../core/services/pathfinder.service';
 import {PathRequest} from '../../../core/models/pathfinder/PathRequest';
+import {LoadingComponent} from '../../../shared/components/loading/loading.component';
 
 
 @Component({
   selector: 'floorplan-viewer',
-  imports: [NgStyle],
+  imports: [NgStyle, LoadingComponent],
   templateUrl: './floorplan-viewer.html',
   styleUrl: './floorplan-viewer.css'
 })
@@ -17,6 +18,8 @@ export class FloorplanViewerComponent {
   @Output() close = new EventEmitter<void>();
   points: Point[] = [];
   routePoints: Point[] = [];
+  loading: boolean = false;
+  errorMessage: string = '';
 
   @ViewChild('image', { read: ElementRef }) imageRef?: ElementRef<HTMLImageElement>;
 
@@ -94,12 +97,17 @@ export class FloorplanViewerComponent {
         end: this.points[1]
       };
 
+      this.loading = true;
+
       this.service.getRouteForFloorplan(pathReq).subscribe({
         next: (data) => {
           this.routePoints = data;
+          this.loading = false;
           console.log('routePoints count (display coords):', this.routePoints.length);
         },
         error: (error) => {
+          this.loading = false;
+          this.errorMessage = 'Error fetching route. Please try again. Try not to click outside the walls.';
           console.error('Error fetching route:', error);
         }
       });
