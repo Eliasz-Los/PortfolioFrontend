@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Loading } from './loading.component';
+import { ScheduleStep } from './schedule-step';
 
-describe('Loading', () => {
-  let component: Loading;
-  let fixture: ComponentFixture<Loading>;
+describe('ScheduleStep', () => {
+  let component: ScheduleStep;
+  let fixture: ComponentFixture<ScheduleStep>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Loading]
+      imports: [ScheduleStep]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Loading);
+    fixture = TestBed.createComponent(ScheduleStep);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

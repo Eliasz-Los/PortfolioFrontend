@@ -1,0 +1,43 @@
+<h5>Select appointment time</h5>
+
+@if (loadingAvailability) {
+  <app-loading message="Loading availability..."></app-loading>
+} @else {
+
+  <div class="week-nav">
+    <button class="btn btn-outline-secondary" (click)="previousWeek()">← Previous Week</button>
+    <span class="week-label">
+      Week of {{ availability[0]?.date }}
+    </span>
+    <button class="btn btn-outline-secondary" (click)="nextWeek()">Next Week →</button>
+  </div>
+
+  <div class="calendar">
+    @for (day of availability; track day.date) {
+      <div class="day">
+        <div class="date">{{ day.date }}</div>
+
+        <div class="hours">
+          @for (hour of [9,10,11,12,13,14,15,16,17,18,19,20,21]; track hour) {
+
+            <!-- AVAILABLE -->
+            @if (day.availableHours.includes(hour)) {
+              <button
+                class="hour available"
+                (click)="selectSlot(day.date, hour)">
+                {{ hour }}:00
+              </button>
+            } @else {
+              <button class="hour taken" disabled>
+                {{ hour }}:00
+              </button>
+            }
+
+          }
+        </div>
+      </div>
+    }
+  </div>
+}
+
+
