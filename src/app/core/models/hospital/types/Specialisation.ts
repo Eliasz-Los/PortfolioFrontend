@@ -1,5 +1,5 @@
 export enum Specialisation {
-  GeneralPractitioner= "General Practitioner",
+  GeneralPractitioner= "GeneralPractitioner",
   Cardiology= "Cardiology",
   Neurology= "Neurology",
   Orthopedics= "Orthopedics",
@@ -9,8 +9,8 @@ export enum Specialisation {
   Dermatology="Dermatology",
   Radiology="Radiology",
   Anesthesiology="Anesthesiology",
-  EmergencyMedicine="Emergency Medicine",
-  InternalMedicine="Internal Medicine",
+  EmergencyMedicine="EmergencyMedicine",
+  InternalMedicine="InternalMedicine",
   Oncology="Oncology",
   Psychiatry="Psychiatry",
   Urology="Urology",

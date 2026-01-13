@@ -13,6 +13,7 @@ import {
   nameValidator,
   phoneNumberValidator
 } from '../../../../shared/validators';
+import {AlertService} from '../../../../core/services/alert.service';
 
 @Component({
   selector: 'app-add-patient',
@@ -31,7 +32,8 @@ export class AddPatientComponent {
   constructor(
     private fb: FormBuilder,
     private patientService: PatientService,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService
   ) {}
 
   ngOnInit(): void {
@@ -98,10 +100,13 @@ export class AddPatientComponent {
 
     this.patientService.create(dto).subscribe({
       next: () => {
-        console.log("Patient created successfully, " + JSON.stringify(dto));
+        this.alertService.success('Patient added successfully.');
         this.router.navigate(['/hospital/patients'])
       },
-      error: (err) => console.error('Error creating patient:', err)
+      error: (err) => {
+        console.error('Error creating patient:', err)
+        this.alertService.error("Failed to add patient.");
+      }
     });
   }
 
