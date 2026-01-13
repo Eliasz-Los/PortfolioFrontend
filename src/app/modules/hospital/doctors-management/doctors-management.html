@@ -1,1 +1,77 @@
-<p>doctors-management works!</p>
+<div class="container my-4">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <div class="d-flex align-items-center w-100">
+        <button class="btn btn-info"
+                (click)="returnToHospitalDashboard()"
+        >
+          <i class="bi bi-house-door-fill me-1"></i>
+          Dashboard
+        </button>
+
+        <h5 class="flex-grow-1 text-center mb-0">Doctors list</h5>
+
+        <div class="ms-2">
+          <button
+            class="btn btn-primary"
+            (click)="addDoctor()"
+          >
+            <i class="bi bi-plus-lg me-1"></i>
+            Doctor
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    @if (isLoading) {
+      <app-loading message="Loading doctors..."></app-loading>
+    } @else {
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+
+          <thead class="table-light">
+          <tr>
+            <th>Name</th>
+            <th>Specialization</th>
+            <th class="text-end">Actions</th>
+          </tr>
+          </thead>
+
+          <tbody>
+            @for (doctor of paginatedDoctors; track doctor.id) {
+              <tr
+                class="clickable-row"
+                (click)="viewDoctor(doctor.id)"
+              >
+                <td>
+                  {{ doctor.fullName.firstName }}
+                  {{ doctor.fullName.lastName }}
+                </td>
+
+                <td>{{ doctor.specialisation }}</td>
+                <td class="text-end">
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    (click)="viewDoctor(doctor.id); $event.stopPropagation()"
+                  >
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <app-pagination
+          [totalItems]="doctorsSnapshot.length"
+          [currentPage]="currentPage"
+          [pageSize]="pageSize"
+          (pageChange)="onPageChange($event)"
+        ></app-pagination>
+
+      </div>
+    }
+  </div>
+</div>
+

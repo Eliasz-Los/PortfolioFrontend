@@ -7,5 +7,4 @@ import { Component } from '@angular/core';
   styleUrl: './about.css'
 })
 export class About {
-//TODO implement this about myself
 }

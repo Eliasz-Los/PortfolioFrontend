@@ -7,7 +7,7 @@ import {FloorplanViewerComponent} from './floorplan-viewer/floorplan-viewer';
 
 @Component({
   selector: 'app-path-finder',
-  imports: [NgStyle, FloorplanViewerComponent],
+  imports: [ FloorplanViewerComponent],
   templateUrl: './path-finder.html',
   styleUrl: './path-finder.css'
 })

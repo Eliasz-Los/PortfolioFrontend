@@ -1,0 +1,86 @@
+<div class="container my-4">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h5 class="mb-0">Add Doctor</h5>
+    </div>
+
+      <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <h6 class="text-primary mb-3">Personal Information</h6>
+          <div formGroupName="fullName" class="row mb-3">
+            @let firstName = form.get('fullName.firstName');
+            @let lastName = form.get('fullName.lastName');
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">First Name</label>
+                <input class="form-control" formControlName="firstName"
+                       [class.is-invalid]="firstName?.touched && firstName?.invalid" />
+               <app-form-errors [control]="firstName"></app-form-errors>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Last Name</label>
+                <input class="form-control" formControlName="lastName"
+                       [class.is-invalid]="lastName?.touched && lastName?.invalid"/>
+                <app-form-errors [control]="lastName"></app-form-errors>
+              </div>
+          </div>
+
+          <div class="mb-3">
+            @let specialty = form.get('specialisation');
+            <label class="form-label">Specialty</label>
+            <select
+              class="form-select"
+              formControlName="specialisation"
+              [class.is-invalid]="specialty?.touched && specialty?.invalid"
+            >
+              <option value="" disabled>Select a specialty</option>
+
+              @for (spec of specialisations; track spec) {
+                <option [value]="spec">{{ spec }}</option>
+              }
+            </select>
+
+            <app-form-errors [control]="specialty"></app-form-errors>
+          </div>
+
+          <h6 class="text-primary mb-3 mt-4">Address</h6>
+          <div formGroupName="workAddress">
+            <div class="mb-3">
+              <label class="form-label">Street</label>
+              <input class="form-control" formControlName="streetName" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">StreetNr</label>
+              <input class="form-control" formControlName="streetNumber" />
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">City</label>
+                <input class="form-control" formControlName="city" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Postal Code</label>
+                <input class="form-control" formControlName="postalCode" />
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Country</label>
+              <input class="form-control" formControlName="country" />
+            </div>
+          </div>
+
+
+          <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="button" class="btn btn-outline-secondary" (click)="cancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-lg me-1"></i> Save Doctor
+            </button>
+          </div>
+
+        </form>
+      </div>
+  </div>
+</div>

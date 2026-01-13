@@ -4,9 +4,6 @@ import {NgIf} from '@angular/common';
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.html',
-  imports: [
-    NgIf
-  ],
   styleUrls: ['./contact.css']
 })
 export class Contact {

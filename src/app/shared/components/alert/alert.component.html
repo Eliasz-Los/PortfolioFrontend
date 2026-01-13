@@ -1,0 +1,23 @@
+@if(alert){
+  <div
+  class="alert alert-{{ alert.type }} alert-dismissible fade show"
+  role="alert">
+
+  <i class="bi me-2"
+     [ngClass]="{
+       'bi-check-circle-fill': alert.type === 'success',
+       'bi-x-circle-fill': alert.type === 'danger',
+       'bi-info-circle-fill': alert.type === 'info',
+       'bi-exclamation-triangle-fill': alert.type === 'warning'
+     }">
+  </i>
+
+  {{ alert.message }}
+
+  <button type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="close()">
+  </button>
+  </div>
+}
