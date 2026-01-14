@@ -63,13 +63,13 @@
         </button>
       </div>
 
-      <app-appointment-list
-        [patientsAppointments]="false"
-        [id]="doctor.id"
-      ></app-appointment-list>
-
     </div>
   </div>
+
+  <app-appointment-list
+    [patientsAppointments]="false"
+    [id]="doctor.id"
+  ></app-appointment-list>
 }
 
 @if(showDeleteModal) {

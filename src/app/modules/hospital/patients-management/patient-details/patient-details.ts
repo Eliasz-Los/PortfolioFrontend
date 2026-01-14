@@ -6,6 +6,7 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {AsyncPipe} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {PatientInvoices} from '../patient-invoices/patient-invoices';
+import {AppointmentListComponent} from '../../../../shared/components/appointment-list/appointment-list.component';
 
 @Component({
   selector: 'app-patient-details',
@@ -14,6 +15,7 @@ import {PatientInvoices} from '../patient-invoices/patient-invoices';
     MatIconModule,
     RouterLink,
     PatientInvoices,
+    AppointmentListComponent,
   ],
   templateUrl: './patient-details.html',
   styleUrl: './patient-details.css'

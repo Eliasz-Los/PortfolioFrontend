@@ -1,13 +1,14 @@
 import {Component, Input} from '@angular/core';
 import {Appointment} from '../../../core/models/hospital/Appointment';
 import {AppointmentService} from '../../../core/services/hospital/appointment.service';
-import {DatePipe} from '@angular/common';
+import {DatePipe, NgClass} from '@angular/common';
 import {AppointmentStatus} from '../../../core/models/hospital/types/AppointmentStatus';
 
 @Component({
   selector: 'app-appointment-list',
   imports: [
-    DatePipe
+    DatePipe,
+    NgClass
   ],
   templateUrl: './appointment-list.component.html',
 })
@@ -43,5 +44,20 @@ export class AppointmentListComponent {
       this.appointments = appointments;
       this.isLoading = false;
     })
+  }
+
+  getStatusClass(status: AppointmentStatus): string {
+    switch (status) {
+      case AppointmentStatus.Completed:
+        return 'bg-success text-white';
+      case AppointmentStatus.Scheduled:
+        return 'bg-warning text-dark';
+      case AppointmentStatus.Canceled:
+        return 'bg-danger text-white';
+      case AppointmentStatus.NoShow:
+        return 'bg-info text-dark';
+      default:
+        return 'bg-secondary text-warning';
+    }
   }
 }

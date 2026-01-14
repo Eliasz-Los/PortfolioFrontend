@@ -81,9 +81,15 @@ export class AppointmentScheduler {
   }
 
   confirmAppointment() {
-    this.appointmentService.create(this.state).subscribe(() => {
-      this.alertService.success('Appointment was created successfully.');
-      this.reset();
+    this.appointmentService.create(this.state).subscribe( {
+
+      next: () => {
+        this.alertService.success('Appointment was created successfully.');
+        this.reset();
+      },
+      error: () =>{
+        this.alertService.error("Failed scheduling for this hour. Try not to schedule in the past");
+      }
     });
   }
 
