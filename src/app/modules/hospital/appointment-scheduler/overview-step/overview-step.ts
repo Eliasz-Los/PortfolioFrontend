@@ -19,7 +19,6 @@ export class OverviewStep {
 
   @Output() confirm = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
-  @Output() goBack = new EventEmitter<void>();
 
   getPatientName(): string {
     const patient = this.patients.find(p => p.id === this.state.patientId);

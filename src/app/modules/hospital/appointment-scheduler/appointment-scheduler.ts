@@ -24,8 +24,10 @@ import {AlertService} from '../../../core/services/alert.service';
   styleUrl: './appointment-scheduler.css'
 })
 export class AppointmentScheduler {
- step: number= 1;
- state: AddAppointmentDto = {
+  step: number= 1;
+  stepNames = ['Patient', 'Doctor', 'Schedule', 'Overview'];
+
+  state: AddAppointmentDto = {
    appointmentDate: '',
    patientId: '',
    doctorId: ''
@@ -79,6 +81,17 @@ export class AppointmentScheduler {
       this.step = stepNumber;
     }
   }
+
+  getStepColor(stepNumber: number): string {
+    if (stepNumber < this.step) {
+      return '#28a745'; // green for completed
+    } else if (stepNumber === this.step) {
+      return '#007bff'; // blue for current
+    } else {
+      return '#ddd'; // gray for remaining
+    }
+  }
+
 
   confirmAppointment() {
     this.appointmentService.create(this.state).subscribe( {
