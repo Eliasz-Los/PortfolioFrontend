@@ -4,12 +4,14 @@ import {DoctorDto} from '../../../../core/models/hospital/DoctorDto';
 import {DoctorService} from '../../../../core/services/hospital/doctor.service';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {AsyncPipe} from '@angular/common';
+import {AppointmentListComponent} from '../../../../shared/components/appointment-list/appointment-list.component';
 
 @Component({
   selector: 'app-doctor-details',
   imports: [
     AsyncPipe,
-    RouterLink
+    RouterLink,
+    AppointmentListComponent
   ],
   templateUrl: './doctor-details.html',
   styleUrl: './doctor-details.css'

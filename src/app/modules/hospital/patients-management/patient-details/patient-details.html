@@ -80,6 +80,8 @@
   </div>
 
   <app-patient-invoices [patientId]="patientId"></app-patient-invoices>
+
+  <app-appointment-list [id]="patientId"></app-appointment-list>
 }
 
 @if (showDeleteModal) {

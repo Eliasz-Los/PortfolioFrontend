@@ -1,0 +1,21 @@
+.overview-card {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px;
+  border-radius: 12px;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.overview-card p {
+  font-size: 1.1rem;
+  margin: 12px 0;
+}
+
+.overview-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px; /* space between buttons */
+  margin-top: 24px;
+}

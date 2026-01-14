@@ -1,0 +1,12 @@
+<div class="overview-card">
+  <h3>Step 4: Overview</h3>
+
+  <p><strong>Patient:</strong> {{ getPatientName() }}</p>
+  <p><strong>Doctor:</strong> {{ getDoctorName() }}</p>
+  <p><strong>Date:</strong> {{ state.appointmentDate | date:'medium' }}</p>
+
+  <div class="overview-buttons">
+    <button class="btn btn-success" (click)="confirm.emit()">Confirm</button>
+    <button class="btn btn-danger" (click)="cancel.emit()">Cancel</button>
+  </div>
+</div>

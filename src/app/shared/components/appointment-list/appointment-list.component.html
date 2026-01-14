@@ -1,0 +1,57 @@
+<div class="container my-4">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h5 class="mb-0">Scheduled Appointments</h5>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+        <tr>
+          <th>Date of appointment</th>
+          @if (!patientsAppointments) {
+            <th>Patient </th>
+          } @else {
+            <th>Doctor</th>
+          }
+          <th>Status</th>
+          @if (!patientsAppointments){
+            <th class="text-end">Actions</th>
+          }
+        </tr>
+        </thead>
+
+        <tbody>
+          @for (appointment of appointments; track appointment.id) {
+            <tr class="clickable-row">
+              <td>{{ appointment.appointmentDate | date: 'medium' }}</td>
+
+              @if (patientsAppointments) {
+                <td>{{ appointment.doctor.fullName.firstName }} {{ appointment.doctor.fullName.lastName }}</td>
+              } @else {
+                <td>{{ appointment.patient.fullName.firstName }} {{ appointment.patient.fullName.lastName }}</td>
+              }
+
+              <td>
+                <span class="badge" [ngClass]="getStatusClass(appointment.status)">
+                  {{ appointment.status }}
+                </span>
+              </td>
+
+              @if (!patientsAppointments) {
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-success"
+                          (click)="markCompleted(appointment.id)">
+                    <i class="bi bi-check2-circle"></i>
+                    Complete Appointment
+                  </button>
+                </td>
+              }
+
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
