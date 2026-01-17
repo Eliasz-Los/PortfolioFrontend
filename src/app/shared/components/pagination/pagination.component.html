@@ -1,40 +1,63 @@
-<nav class="mt-3">
-  <ul class="pagination justify-content-center">
+@if (totalPagesCount > 1){
+  <nav class="mt-3">
+    <ul class="pagination justify-content-center">
 
-    <li class="page-item" [class.disabled]="currentPage === 1">
-      <button
-        class="page-link"
-        (click)="changePage(currentPage - 1)"
-      >
-        Previous
-      </button>
-    </li>
-
-    @for (page of totalPages; track page) {
-      <li
-        class="page-item"
-        [class.active]="page === currentPage"
-      >
+      <li class="page-item" [class.disabled]="currentPage === 1">
         <button
           class="page-link"
-          (click)="changePage(page)"
+          (click)="changePage(currentPage - 1)"
         >
-          {{ page }}
+          Previous
         </button>
       </li>
-    }
+      <!--    First page-->
+      <li class="page-item" [class.active]="1 === currentPage">
+        <button class="page-link" (click)="changePage(1)">1</button>
+      </li>
 
-    <li
-      class="page-item"
-      [class.disabled]="currentPage === totalPages.length"
-    >
-      <button
-        class="page-link"
-        (click)="changePage(currentPage + 1)"
-      >
-        Next
-      </button>
-    </li>
+      @if (showLeftEllipsis){
+        <li class="page-item disabled">
+          <span class="page-link">…</span>
+        </li>
+      }
 
-  </ul>
-</nav>
+      <!--    middle pages-->
+      @for (page of middlePages; track page) {
+        <li
+          class="page-item"
+          [class.active]="page === currentPage"
+        >
+          <button
+            class="page-link"
+            (click)="changePage(page)"
+          >
+            {{ page }}
+          </button>
+        </li>
+      }
+
+      @if (showRightEllipsis){
+        <li class="page-item disabled">
+          <span class="page-link">…</span>
+        </li>
+      }
+
+      <!--    Last page-->
+      @if (totalPagesCount > 1) {
+        <li class="page-item" [class.active]="totalPagesCount === currentPage">
+          <button class="page-link" (click)="changePage(totalPagesCount)">{{ totalPagesCount }}</button>
+
+          }
+
+      <li class="page-item" [class.disabled]="currentPage === totalPagesCount">
+        <button class="page-link" (click)="changePage(currentPage + 1)">
+          Next
+        </button>
+      </li>
+
+
+
+    </ul>
+  </nav>
+}
+

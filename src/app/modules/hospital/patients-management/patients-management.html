@@ -11,7 +11,9 @@
         </button>
 
         <h5 class="flex-grow-1 text-center mb-0">Patients list</h5>
-
+        <div class="ms-2">
+          <app-entity-search (search)="onSearch($event)" placeholder="Search patients..."></app-entity-search>
+        </div>
         <div class="ms-2">
           <button
             class="btn btn-primary"
@@ -74,47 +76,13 @@
 
         </table>
 
-        <nav class="mt-3">
-          <ul class="pagination justify-content-center">
 
-            <li class="page-item" [class.disabled]="currentPage === 1">
-              <button
-                class="page-link"
-                (click)="changePage(currentPage - 1)"
-              >
-                Previous
-              </button>
-            </li>
-
-            @for (page of totalPages; track page) {
-              <li
-                class="page-item"
-                [class.active]="page === currentPage"
-              >
-                <button
-                  class="page-link"
-                  (click)="changePage(page)"
-                >
-                  {{ page }}
-                </button>
-              </li>
-            }
-
-            <li
-              class="page-item"
-              [class.disabled]="currentPage === totalPages.length"
-            >
-              <button
-                class="page-link"
-                (click)="changePage(currentPage + 1)"
-              >
-                Next
-              </button>
-            </li>
-
-          </ul>
-        </nav>
-
+      <app-pagination
+                  [totalItems]="patientsSnapshot.length"
+                  [currentPage]="currentPage"
+                  [pageSize]="pageSize"
+                  (pageChange)="onPageChange($event)"
+      ></app-pagination>
 
       </div>
     }

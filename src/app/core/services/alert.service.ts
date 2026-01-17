@@ -12,7 +12,7 @@ export class AlertService {
     this.alertSubject.next({ type: 'success', message });
   }
 
-  error(message: string) {
+  error(message: string, p0?: string) {
     this.alertSubject.next({ type: 'danger', message });
   }
 

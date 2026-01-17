@@ -10,6 +10,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import {Router} from '@angular/router';
 import {LoadingComponent} from '../../../shared/components/loading/loading.component';
+import {PaginationComponent} from '../../../shared/components/pagination/pagination.component';
+import {AlertService} from '../../../core/services/alert.service';
+import {EntitySearchComponent} from '../../../shared/components/entity-search/entity-search.component';
 
 @Component({
   selector: 'app-patients-management',
@@ -19,7 +22,9 @@ import {LoadingComponent} from '../../../shared/components/loading/loading.compo
     MatTableModule,
     MatIconModule,
     MatButtonModule,
-    LoadingComponent
+    LoadingComponent,
+    PaginationComponent,
+    EntitySearchComponent
   ],
   templateUrl: './patients-management.html',
   styleUrl: './patients-management.css'
@@ -32,7 +37,8 @@ export class PatientsManagement {
   pageSize = 20;
 
   constructor(private patientService: PatientService,
-              private router: Router)
+              private router: Router,
+              private alertService: AlertService)
   {
     this.patients = this.patientService.getAll();
   }
@@ -57,8 +63,7 @@ export class PatientsManagement {
     return Array.from({ length: total }, (_, i) => i + 1);
   }
 
-  changePage(page: number): void {
-    if (page < 1 || page > this.totalPages.length) return;
+  onPageChange(page: number): void {
     this.currentPage = page;
   }
 
@@ -72,5 +77,35 @@ export class PatientsManagement {
 
   returnToHospitalDashboard() {
     this.router.navigate(['hospital']);
+  }
+
+  onSearch(term: string | null): void {
+    this.isLoading = true;
+    if (!term) {
+      this.patientService.getAll().subscribe({
+        next: list => {
+          this.patientsSnapshot = list;
+          this.currentPage = 1;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.alertService.error('Search failed for: .', term ?? '');
+          this.isLoading = false;
+        }
+      });
+      return;
+    }
+
+    this.patientService.searchPatients(term).subscribe({
+      next: list => {
+        this.patientsSnapshot = list;
+        this.currentPage = 1;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.alertService.error('Search failed for: .', term ?? '');
+        this.isLoading = false;
+      }
+    });
   }
 }
