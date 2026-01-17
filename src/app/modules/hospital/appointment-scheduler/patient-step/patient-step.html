@@ -1,0 +1,21 @@
+<h5>Select a patient</h5>
+
+@if (loadingPatients) {
+  <app-loading message="Loading patients..."></app-loading>
+} @else {
+
+  <ul class="list-group">
+    @for (patient of patients; track patient.id) {
+      <li
+        class="list-group-item list-group-item-action"
+        (click)="select(patient.id)"
+      >
+        <strong>
+          {{ patient.fullName.firstName }} {{ patient.fullName.lastName }}
+        </strong><br />
+        <small>{{ patient.email }}</small>
+      </li>
+    }
+  </ul>
+
+}

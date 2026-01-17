@@ -1,1 +1,83 @@
-<p>appointment-scheduler works!</p>
+<div class="container my-4">
+  <div class="row justify-content-center g-3">
+
+      <h3>Add Appointment</h3>
+    <!--Progress bar-->
+    <div class="stepper-container">
+      <!-- Background line -->
+      <div class="stepper-line-bg"></div>
+
+      <!-- Progress line -->
+      <div
+        class="stepper-line-progress"
+        [style.width.%]="(step - 1) / (stepNames.length - 1) * 100"
+        [style.background]="'#28a745'"> <!-- green progress behind active step -->
+      </div>
+
+      <div class="stepper-steps">
+        @for (s of [1,2,3,4]; let i = $index; track s){
+          <div class="step-wrapper">
+            <div
+              class="step-circle"
+              [style.background]="getStepColor(s)"
+              (click)="goToStep(s)">
+              {{ s }}
+            </div>
+            <div class="step-label">
+              {{ stepNames[i] }}
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+
+
+    <div class="step-nav">
+      <button class="btn btn-outline-secondary"
+              (click)="step > 1 ? goToStep(step - 1) : null"
+              [disabled]="step === 1">← Previous Step</button>
+
+      <button class="btn btn-primary"
+              (click)="step < 4 ? goToStep(step + 1) : null">
+        Next Step →
+      </button>
+    </div>
+
+    @if (step === 1) {
+        <app-patient-step
+          [patients]="patients"
+          [loadingPatients]="loadingPatients"
+          (selectPatient)="onPatientSelected($event)">
+        </app-patient-step>
+      }
+
+      @if (step === 2) {
+        <app-doctor-step
+          [doctors]="doctors"
+          [loadingDoctors]="loadingDoctors"
+          (selectDoctor)="onDoctorSelected($event)"
+          ></app-doctor-step>
+      }
+
+
+      @if (step === 3) {
+        <app-schedule-step
+          [doctorId]="state.doctorId"
+          (selectDateTime)="onDateSelected($event)">
+        </app-schedule-step>
+      }
+
+      @if (step === 4) {
+        <app-overview-step
+          [state]="state"
+          [patients]="patients"
+          [doctors]="doctors"
+          (confirm)="confirmAppointment()"
+          (cancel)="cancelAppointment()"
+          (goBack)="goToStep(3)">
+        </app-overview-step>
+      }
+
+  </div>
+</div>

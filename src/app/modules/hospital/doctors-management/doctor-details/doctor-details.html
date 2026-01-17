@@ -52,20 +52,24 @@
       <div class="card-footer d-flex justify-content-end gap-2">
         <button class="btn btn-outline-primary">
           <i class="bi bi-pencil me-1"></i>
-          Edit patient
+          Edit doctor
         </button>
         <button
           class="btn btn-outline-danger"
           (click)="openDeleteModal()"
         >
           <i class="bi bi-trash me-1"></i>
-          Delete patient
+          Delete doctor
         </button>
       </div>
 
-
     </div>
   </div>
+
+  <app-appointment-list
+    [patientsAppointments]="false"
+    [id]="doctor.id"
+  ></app-appointment-list>
 }
 
 @if(showDeleteModal) {

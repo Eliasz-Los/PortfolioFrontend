@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {InvoiceDto} from '../../../../core/models/hospital/InvoiceDto';
 import {PatientService} from '../../../../core/services/hospital/patient.service';
 import {InvoiceService} from '../../../../core/services/hospital/invoice.service';
+import {AlertService} from '../../../../core/services/alert.service';
 
 @Component({
   selector: 'app-patient-invoices',
@@ -15,7 +16,8 @@ export class PatientInvoices {
   invoices: InvoiceDto[] = [];
 
   constructor(private patientService : PatientService,
-              private invoiceService : InvoiceService) {}
+              private invoiceService : InvoiceService,
+              private alertService: AlertService) {}
 
   ngOnInit(): void {
     if (!this.patientId) return;
@@ -24,8 +26,8 @@ export class PatientInvoices {
       next: (invoices) => {
         this.invoices = invoices;
       },
-      error: (err) => {
-        console.error('Error fetching invoices:', err);
+      error: () => {
+        this.alertService.error('Error fetching invoices');
       }
     })
   }
@@ -36,8 +38,9 @@ export class PatientInvoices {
         const url = window.URL.createObjectURL(blob);
         window.open(url);
       },
-      error: (err) => {
-        console.error('Error fetching invoice PDF:', err);
+      error: () => {
+        this.alertService.error('Error with visualising PDF for this particular invoice', );
+
       }
     })
   }
