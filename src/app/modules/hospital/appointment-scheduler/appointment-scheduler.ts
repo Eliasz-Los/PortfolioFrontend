@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AddAppointmentDto} from '../../../core/models/hospital/AddAppointmentDto';
 import {PatientDto} from '../../../core/models/hospital/PatientDto';
 import {DoctorDto} from '../../../core/models/hospital/DoctorDto';
@@ -23,7 +23,7 @@ import {AlertService} from '../../../core/services/alert.service';
   templateUrl: './appointment-scheduler.html',
   styleUrl: './appointment-scheduler.css'
 })
-export class AppointmentScheduler {
+export class AppointmentScheduler implements OnInit {
   step: number= 1;
   stepNames = ['Patient', 'Doctor', 'Schedule', 'Overview'];
 
@@ -45,11 +45,29 @@ export class AppointmentScheduler {
              private alertService: AlertService) {}
 
   ngOnInit(): void {
-    this.patientService.getAll().subscribe(patients => {
-      this.patients = patients;
-      this.loadingPatients = false;
-    });
+    this.loadPatients(null);
 
+  }
+
+  // STEP 1: Patient selection
+  private loadPatients(term: string | null): void {
+    this.loadingPatients = true;
+    const req$ = term ? this.patientService.searchPatients(term) : this.patientService.getAll();
+
+    req$.subscribe({
+      next: list => {
+        this.patients = list;
+        this.loadingPatients = false;
+      },
+      error: () => {
+        this.alertService.error('Search for those patients failed.');
+        this.loadingPatients = false;
+      },
+    });
+  }
+
+  onSearchPatients(term: string | null): void {
+    this.loadPatients(term);
   }
 
   onPatientSelected(patientId: string): void {
@@ -58,7 +76,7 @@ export class AppointmentScheduler {
     this.loadDoctors();
   }
 
-
+  // STEP 2: Doctor selection
   private loadDoctors() {
     this.doctorService.getAll().subscribe(docs => {
       this.doctors = docs;
@@ -66,32 +84,20 @@ export class AppointmentScheduler {
     })
   }
 
+  onSearchDoctors(term: string | null): void {
+    this.loadDoctors();
+  }
+
   onDoctorSelected(doctorId: string): void {
     this.state.doctorId = doctorId;
     this.step = 3;
   }
 
+  // STEP 3: Schedule selection
   onDateSelected(dateTime: string) {
     this.state.appointmentDate = dateTime;
     this.step = 4;
   }
-
-  goToStep(stepNumber: number) {
-    if (stepNumber < this.step) {
-      this.step = stepNumber;
-    }
-  }
-
-  getStepColor(stepNumber: number): string {
-    if (stepNumber < this.step) {
-      return '#28a745'; // green for completed
-    } else if (stepNumber === this.step) {
-      return '#007bff'; // blue for current
-    } else {
-      return '#ddd'; // gray for remaining
-    }
-  }
-
 
   confirmAppointment() {
     this.appointmentService.create(this.state).subscribe( {
@@ -104,6 +110,23 @@ export class AppointmentScheduler {
         this.alertService.error("Failed scheduling for this hour. Try not to schedule in the past");
       }
     });
+  }
+
+  //Progression and colors
+  goToStep(stepNumber: number) {
+    if (stepNumber < this.step) {
+      this.step = stepNumber;
+    }
+  }
+
+  getStepColor(stepNumber: number): string {
+    if (stepNumber < this.step) {
+      return '#28a745';
+    } else if (stepNumber === this.step) {
+      return '#007bff';
+    } else {
+      return '#ddd';
+    }
   }
 
   cancelAppointment() {

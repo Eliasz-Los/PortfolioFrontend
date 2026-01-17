@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EntitySearchComponent } from './entity-search.component';
+import { EntityPickerComponent } from './entity-picker.component';
 
-describe('EntitySearchComponentComponent', () => {
-  let component: EntitySearchComponent;
-  let fixture: ComponentFixture<EntitySearchComponent>;
+describe('EntityPicker', () => {
+  let component: EntityPickerComponent;
+  let fixture: ComponentFixture<EntityPickerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EntitySearchComponent]
+      imports: [EntityPickerComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EntitySearchComponent);
+    fixture = TestBed.createComponent(EntityPickerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

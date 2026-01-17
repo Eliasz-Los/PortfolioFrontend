@@ -1,37 +1,30 @@
 <div class="container my-4">
   <div class="row justify-content-center g-3">
-
-      <h3>Add Appointment</h3>
-    <!--Progress bar-->
+    <h3>Add Appointment</h3>
     <div class="stepper-container">
-      <!-- Background line -->
-      <div class="stepper-line-bg"></div>
+        <div class="stepper-line-bg"></div>
+        <div
+          class="stepper-line-progress"
+          [style.width.%]="(step - 1) / (stepNames.length - 1) * 100"
+          [style.background]="'#28a745'">
+        </div>
 
-      <!-- Progress line -->
-      <div
-        class="stepper-line-progress"
-        [style.width.%]="(step - 1) / (stepNames.length - 1) * 100"
-        [style.background]="'#28a745'"> <!-- green progress behind active step -->
-      </div>
-
-      <div class="stepper-steps">
-        @for (s of [1,2,3,4]; let i = $index; track s){
-          <div class="step-wrapper">
-            <div
-              class="step-circle"
-              [style.background]="getStepColor(s)"
-              (click)="goToStep(s)">
-              {{ s }}
+        <div class="stepper-steps">
+          @for (s of [1,2,3,4]; let i = $index; track s){
+            <div class="step-wrapper">
+              <div
+                class="step-circle"
+                [style.background]="getStepColor(s)"
+                (click)="goToStep(s)">
+                {{ s }}
+              </div>
+              <div class="step-label">
+                {{ stepNames[i] }}
+              </div>
             </div>
-            <div class="step-label">
-              {{ stepNames[i] }}
-            </div>
-          </div>
-        }
+          }
+        </div>
       </div>
-    </div>
-
-
 
     <div class="step-nav">
       <button class="btn btn-outline-secondary"
@@ -48,7 +41,8 @@
         <app-patient-step
           [patients]="patients"
           [loadingPatients]="loadingPatients"
-          (selectPatient)="onPatientSelected($event)">
+          (selectPatient)="onPatientSelected($event)"
+          (searchPatients)="onSearchPatients($event)">
         </app-patient-step>
       }
 
@@ -57,6 +51,7 @@
           [doctors]="doctors"
           [loadingDoctors]="loadingDoctors"
           (selectDoctor)="onDoctorSelected($event)"
+          (searchDoctors)="onSearchDoctors($event)"
           ></app-doctor-step>
       }
 
@@ -74,8 +69,7 @@
           [patients]="patients"
           [doctors]="doctors"
           (confirm)="confirmAppointment()"
-          (cancel)="cancelAppointment()"
-          (goBack)="goToStep(3)">
+          (cancel)="cancelAppointment()">
         </app-overview-step>
       }
 

@@ -1,21 +1,11 @@
-<h5>Select your doctor</h5>
-
-@if (loadingDoctors) {
-  <app-loading message="Loading doctors..."></app-loading>
-} @else {
-
-  <ul class="list-group">
-    @for (doc of doctors; track doc.id) {
-      <li
-        class="list-group-item list-group-item-action"
-        (click)="select(doc.id)"
-      >
-        <strong>
-          {{ doc.fullName.firstName }} {{ doc.fullName.lastName }}
-        </strong><br />
-        <small>{{ doc.specialisation }}</small>
-      </li>
-    }
-  </ul>
-
-}
+<app-entity-picker
+  title="Select a doctor"
+  searchPlaceholder="Search doctors..."
+  [isLoading]="loadingDoctors"
+  [items]="vm"
+  [currentPage]="currentPage"
+  [pageSize]="pageSize"
+  (search)="searchDoctors.emit($event)"
+  (select)="selectDoctor.emit($event)"
+  (pageChange)="pageChange.emit($event)"
+></app-entity-picker>

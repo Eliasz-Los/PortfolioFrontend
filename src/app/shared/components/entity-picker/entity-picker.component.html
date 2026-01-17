@@ -1,0 +1,32 @@
+<div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+  <h5 class="mb-0">{{ title }}</h5>
+  <app-entity-search
+    [placeholder]="searchPlaceholder"
+    (search)="onSearch($event)"
+  ></app-entity-search>
+</div>
+
+@if (isLoading) {
+  <app-loading [message]="'Loading...'" />
+} @else {
+  <ul class="list-group">
+    @for (item of paginatedItems; track item.id) {
+      <li class="list-group-item list-group-item-action" (click)="select.emit(item.id)">
+        <strong>{{ item.displayName }}</strong><br />
+        @if (item.subtitle) {
+          <small>{{ item.subtitle }}</small>
+        }
+      </li>
+    }
+  </ul>
+
+  @if (showPagination){
+    <app-pagination
+      [totalItems]="totalItems"
+      [currentPage]="currentPage"
+      [pageSize]="pageSize"
+      (pageChange)="onPageChange($event)"
+    ></app-pagination>
+  }
+
+}

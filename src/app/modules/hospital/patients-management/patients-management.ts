@@ -13,6 +13,7 @@ import {LoadingComponent} from '../../../shared/components/loading/loading.compo
 import {PaginationComponent} from '../../../shared/components/pagination/pagination.component';
 import {AlertService} from '../../../core/services/alert.service';
 import {EntitySearchComponent} from '../../../shared/components/entity-search/entity-search.component';
+import {EntitySearchManager} from '../../../shared/utils/EntitySearchManager';
 
 @Component({
   selector: 'app-patients-management',
@@ -29,25 +30,32 @@ import {EntitySearchComponent} from '../../../shared/components/entity-search/en
   templateUrl: './patients-management.html',
   styleUrl: './patients-management.css'
 })
-export class PatientsManagement {
-  isLoading = true;
+export class PatientsManagement extends EntitySearchManager<PatientDto>{
   patients: Observable<PatientDto[]>;
-
-  currentPage = 1;
+  patientsSnapshot: PatientDto[] = [];
   pageSize = 20;
 
   constructor(private patientService: PatientService,
               private router: Router,
-              private alertService: AlertService)
+              alertService: AlertService)
   {
+    super(alertService);
     this.patients = this.patientService.getAll();
   }
 
   ngOnInit(): void {
-    this.patients.subscribe(patients => {
-      this.patientsSnapshot = patients;
+    this.isLoading = true;
+    this.loadAll$().subscribe(list => {
+      this.patientsSnapshot = list;
       this.isLoading = false;
     });
+  }
+
+  protected override loadAll$(): Observable<PatientDto[]> {
+    return this.patientService.getAll();
+  }
+  protected override search$(term: string): Observable<PatientDto[]> {
+    return this.patientService.searchPatients(term);
   }
 
   get paginatedPatients(): PatientDto[] {
@@ -56,7 +64,9 @@ export class PatientsManagement {
     return patients.slice(start, start + this.pageSize);
   }
 
-  patientsSnapshot: PatientDto[] = [];
+  onSearch(term: string | null): void {
+    this.onSearchGeneric(term, list => (this.patientsSnapshot = list));
+  }
 
   get totalPages(): number[] {
     const total = Math.ceil(this.patientsSnapshot.length / this.pageSize);
@@ -79,33 +89,5 @@ export class PatientsManagement {
     this.router.navigate(['hospital']);
   }
 
-  onSearch(term: string | null): void {
-    this.isLoading = true;
-    if (!term) {
-      this.patientService.getAll().subscribe({
-        next: list => {
-          this.patientsSnapshot = list;
-          this.currentPage = 1;
-          this.isLoading = false;
-        },
-        error: () => {
-          this.alertService.error('Search failed for: .', term ?? '');
-          this.isLoading = false;
-        }
-      });
-      return;
-    }
 
-    this.patientService.searchPatients(term).subscribe({
-      next: list => {
-        this.patientsSnapshot = list;
-        this.currentPage = 1;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.alertService.error('Search failed for: .', term ?? '');
-        this.isLoading = false;
-      }
-    });
-  }
 }

@@ -1,22 +1,33 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {PatientDto} from '../../../../core/models/hospital/PatientDto';
-import {LoadingComponent} from '../../../../shared/components/loading/loading.component';
+import {EntityPickerViewModel} from '../../../../core/models/hospital/EntityPickerViewModel';
+import {EntityPickerComponent} from '../../../../shared/components/entity-picker/entity-picker.component';
 
 @Component({
   selector: 'app-patient-step',
   imports: [
-    LoadingComponent
+    EntityPickerComponent
   ],
   templateUrl: './patient-step.html',
   styleUrl: './patient-step.css'
 })
-export class PatientStep {
+export class PatientStep{
+
   @Input() patients: PatientDto[] = [];
   @Input() loadingPatients: boolean = false;
+  @Input() totalItems = 0;
+  @Input() pageSize = 10;
+  @Input() currentPage = 1;
 
   @Output() selectPatient = new EventEmitter<string>();
+  @Output() searchPatients = new EventEmitter<string | null>();
+  @Output() pageChange = new EventEmitter<number>();
 
-  select(id: string){
-    this.selectPatient.emit(id);
+  get vm(): EntityPickerViewModel[] {
+    return (this.patients ?? []).map((p): EntityPickerViewModel => ({
+      id: p.id,
+      displayName: `${p.fullName.firstName} ${p.fullName.lastName}`,
+      subtitle: p.email,
+    }));
   }
 }
