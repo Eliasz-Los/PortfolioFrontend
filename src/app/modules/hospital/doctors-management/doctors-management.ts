@@ -6,34 +6,37 @@ import {Router} from '@angular/router';
 import {LoadingComponent} from '../../../shared/components/loading/loading.component';
 import {PaginationComponent} from '../../../shared/components/pagination/pagination.component';
 import {Specialisation} from '../../../core/models/hospital/types/Specialisation';
+import {EntitySearchComponent} from '../../../shared/components/entity-search/entity-search.component';
+import {AlertService} from '../../../core/services/alert.service';
+import {EntitySearchManager} from '../../../shared/utils/EntitySearchManager';
 
 @Component({
   selector: 'app-doctors-management',
   imports: [
     LoadingComponent,
-    PaginationComponent
+    PaginationComponent,
+    EntitySearchComponent
   ],
   templateUrl: './doctors-management.html',
   styleUrl: './doctors-management.css'
 })
-export class DoctorsManagement {
-  isLoading = true;
+export class DoctorsManagement extends EntitySearchManager<DoctorDto> {
   doctors: Observable<DoctorDto[]>;
-
-  currentPage = 1;
   pageSize = 20;
   doctorsSnapshot: DoctorDto[] = [];
 
   constructor(private doctorService: DoctorService,
-              private router: Router) {
+              private router: Router, alertService: AlertService){
+    super(alertService);
     this.doctors = this.doctorService.getAll();
   }
 
   ngOnInit(): void {
-    this.doctors.subscribe(doctors => {
-      this.doctorsSnapshot = doctors;
+    this.isLoading = true;
+    this.loadAll$().subscribe(list => {
+      this.doctorsSnapshot = list;
       this.isLoading = false;
-    });
+    })
   }
 
   get paginatedDoctors(): DoctorDto[] {
@@ -63,4 +66,14 @@ export class DoctorsManagement {
     this.router.navigate(['/hospital']);
   }
 
+  protected override loadAll$(): Observable<DoctorDto[]> {
+    return this.doctorService.getAll();
+  }
+  protected override search$(term: string): Observable<DoctorDto[]> {
+    return this.doctorService.searchDoctors(term);
+  }
+
+  onSearch(term: string | null): void {
+    this.onSearchGeneric(term, list => (this.doctorsSnapshot = list));
+  }
 }

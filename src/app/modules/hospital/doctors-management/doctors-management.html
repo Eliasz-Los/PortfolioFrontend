@@ -12,6 +12,10 @@
         <h5 class="flex-grow-1 text-center mb-0">Doctors list</h5>
 
         <div class="ms-2">
+          <app-entity-search (search)="onSearch($event)" placeholder="Search doctors..."></app-entity-search>
+        </div>
+
+        <div class="ms-2">
           <button
             class="btn btn-primary"
             (click)="addDoctor()"

@@ -27,7 +27,7 @@ export class PatientStep{
     return (this.patients ?? []).map((p): EntityPickerViewModel => ({
       id: p.id,
       displayName: `${p.fullName.firstName} ${p.fullName.lastName}`,
-      subtitle: p.email,
+      subtitle: p.dateOfBirth,
     }));
   }
 }

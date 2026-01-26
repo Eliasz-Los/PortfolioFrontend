@@ -73,19 +73,28 @@ export class AppointmentScheduler implements OnInit {
   onPatientSelected(patientId: string): void {
     this.state.patientId = patientId;
     this.step = 2;
-    this.loadDoctors();
+    this.loadDoctors(null);
   }
 
   // STEP 2: Doctor selection
-  private loadDoctors() {
-    this.doctorService.getAll().subscribe(docs => {
-      this.doctors = docs;
-      this.loadingDoctors = false;
-    })
+  private loadDoctors(term: string | null): void {
+    this.loadingDoctors = true;
+    const req$ = term ? this.doctorService.searchDoctors(term) : this.doctorService.getAll();
+
+    req$.subscribe({
+      next: list => {
+        this.doctors = list;
+        this.loadingDoctors = false;
+      },
+      error: () => {
+        this.alertService.error('Search for those doctors failed.');
+        this.loadingDoctors = false;
+      },
+    });
   }
 
   onSearchDoctors(term: string | null): void {
-    this.loadDoctors();
+    this.loadDoctors(term);
   }
 
   onDoctorSelected(doctorId: string): void {
