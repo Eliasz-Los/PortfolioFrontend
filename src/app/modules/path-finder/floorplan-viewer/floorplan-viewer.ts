@@ -5,6 +5,7 @@ import {Point} from '../../../core/models/pathfinder/Point';
 import {PathfinderService} from '../../../core/services/pathfinder.service';
 import {PathRequest} from '../../../core/models/pathfinder/PathRequest';
 import {LoadingComponent} from '../../../shared/components/loading/loading.component';
+import {AlertService} from '../../../core/services/alert.service';
 
 
 @Component({
@@ -20,10 +21,12 @@ export class FloorplanViewerComponent {
   routePoints: Point[] = [];
   loading: boolean = false;
   errorMessage: string = '';
+  showLegend: boolean = true;
 
   @ViewChild('image', { read: ElementRef }) imageRef?: ElementRef<HTMLImageElement>;
 
-  constructor(private service: PathfinderService) {}
+  constructor(private service: PathfinderService,
+              private alertService : AlertService) {}
 
   closeViewer() {
     this.close.emit();
@@ -42,6 +45,7 @@ export class FloorplanViewerComponent {
   resetPoints() {
     this.points = [];
     this.routePoints = [];
+    this.errorMessage = '';
   }
 
 
@@ -142,5 +146,13 @@ export class FloorplanViewerComponent {
     const scaleX = img!.clientWidth / img!.naturalWidth;
     const scaleY = img!.clientHeight / img!.naturalHeight;
     return { scaleX, scaleY };
+  }
+
+  toggleLegend(): void {
+    this.showLegend = !this.showLegend;
+  }
+
+  hideLegend(): void {
+    this.showLegend = false;
   }
 }

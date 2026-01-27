@@ -16,9 +16,7 @@
         <div class="fp-marker fp-marker-end" [ngStyle]="markerStyle(points[1])"> </div>
       }
 
-      @if (points.length == 2) {
-        <button class="btn btn-danger" (click)="getRoute()" [disabled]="loading">Get Route</button>
-      }
+
 
 
 
@@ -53,19 +51,44 @@
         </div>
       }
 
-      @if (!loading && !errorMessage && !hasRoute()) {
-        <div class="fp-legend" (click)="$event.stopPropagation()">
+      @if (showLegend) {
+        <div class="fp-legend" (click)="hideLegend()">
           <div class="fp-legend-text">
             <div class="fp-legend-title">How it works</div>
             <div class="fp-legend-subtitle">First click is the start, green point</div>
             <div class="fp-legend-subtitle">Second click is the destination, red point</div>
             <div class="fp-legend-subtitle">Afterwards you'll see the button to get the route to your destination</div>
+            <button class="btn btn-sm btn-outline-secondary mt-2" (click)="hideLegend()">
+              Hide
+            </button>
           </div>
         </div>
       }
 
+    </div>
+    <div class="fp-footer" (click)="onDialogClick($event)">
+      <button class="btn btn-outline-info" (click)="toggleLegend()">
+        {{ showLegend ? 'Hide help' : 'Show help' }}
+      </button>
 
+      @if (points.length >= 1) {
+        <button
+          class="btn btn-outline-danger"
+          (click)="resetPoints()"
+          [disabled]="loading || points.length === 0"
+        >
+          Reset points
+        </button>
+      }
+
+
+      @if (points.length == 2) {
+        <button class="btn btn-outline-primary" (click)="getRoute()" [disabled]="loading">Get Route</button>
+      }
 
     </div>
   </div>
+
+
+
 </div>
