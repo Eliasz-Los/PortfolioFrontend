@@ -16,9 +16,16 @@ export class Home {
       image: '/pathfinder-module.jpg',
       route: '/pathfinder'
     },
-    {title: 'Hospital Management',
-    image: '/hospital-module.jpg',
-    route: '/hospital'}
+    {
+    title: 'Hospital Management',
+    image: '/hospital/hospital-module.jpg',
+    route: '/hospital'
+    },
+    {
+      title: 'DocuGroup',
+      image: '/brainempty.gif',
+      route: '/docugroup'
+    }
     ];
 }
 

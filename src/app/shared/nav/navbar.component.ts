@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
+import {keycloakAuth} from '../../core/services/auth/KeycloakAuthService';
 
 @Component({
   selector: 'app-navbar',
@@ -9,5 +10,7 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
   standalone: true
 })
 export class Navbar {
+  keycloak = keycloakAuth;
 
+  protected readonly keycloakAuth = keycloakAuth;
 }

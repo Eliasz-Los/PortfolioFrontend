@@ -11,6 +11,9 @@ import {PatientDetails} from './modules/hospital/patients-management/patient-det
 import {AddPatientComponent} from './modules/hospital/patients-management/add-patient/add-patient';
 import {DoctorDetails} from './modules/hospital/doctors-management/doctor-details/doctor-details';
 import {AddDoctor} from './modules/hospital/doctors-management/add-doctor/add-doctor';
+import {authGuard} from './core/guards/auth.guard';
+import {Docugroup} from './modules/docugroup/docugroup';
+import {Account} from './modules/account/account';
 
 export const routes: Routes = [
   {path:'', component: Home, pathMatch: 'full'},
@@ -25,4 +28,6 @@ export const routes: Routes = [
   {path: 'hospital/doctors/add', component: AddDoctor, pathMatch: 'full'},
   {path: 'hospital/doctors/:id', component: DoctorDetails, pathMatch: 'full'},
   {path: 'hospital/appointments', component: AppointmentScheduler, pathMatch: 'full'},
+  {path: 'docugroup', component: Docugroup, canActivate: [authGuard], pathMatch: 'full'},
+  {path: 'account', component: Account, canActivate: [authGuard], pathMatch: 'full'},
 ];
