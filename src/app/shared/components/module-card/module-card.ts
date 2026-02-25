@@ -4,6 +4,7 @@ import {NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-module-card',
+  standalone: true,
   imports: [
     NgStyle
   ],
@@ -19,5 +20,9 @@ export class ModuleCardComponent {
 
   navigate(){
     this.router.navigate([this.route]);
+  }
+
+  get bgStyle() {
+    return { 'background-image': `url("${this.image}")` };
   }
 }

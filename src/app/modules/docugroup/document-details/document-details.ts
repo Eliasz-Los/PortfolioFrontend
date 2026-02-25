@@ -3,7 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   DestroyRef,
-  ElementRef, OnInit,
+  ElementRef, OnDestroy, OnInit,
   QueryList,
   signal,
   ViewChildren
@@ -24,6 +24,8 @@ import {ChangeTypeComponentDto} from '../../../core/models/docugroup/doc-compone
 import {ComponentType} from '../../../core/models/docugroup/doc-components/ComponentType';
 import {AddComponentDto} from '../../../core/models/docugroup/doc-components/AddComponentDto';
 import {AddComponentModal} from './add-component-modal/add-component-modal';
+import {EventService} from '../../../core/services/docugroup/event.service';
+import {keycloakAuth} from '../../../core/services/auth/KeycloakAuthService';
 
 
 @Component({
@@ -38,17 +40,20 @@ import {AddComponentModal} from './add-component-modal/add-component-modal';
   templateUrl: './document-details.html',
   styleUrl: './document-details.css'
 })
-export class DocumentDetails implements OnInit{
+export class DocumentDetails implements OnInit, OnDestroy{
   groupDocument$: Observable<DraftDocument> = new Observable<DraftDocument>();
   loading: boolean = true;
   saving: boolean = false;
   currentDoc: DraftDocument | null = null;//purely for the reorder UI
   isAddModalOpen =false;
+  //SSE
+  private closeSSE?: () => void;
 
   constructor(private documentService: DocumentService,
               private componentService: ComponentService,
               private alertService: AlertService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private eventService: EventService) {
 
   }
 
@@ -58,12 +63,47 @@ export class DocumentDetails implements OnInit{
         const id = params.get('id')!;
         this.loading = true;
 
+        //Connect SSE once we know the doc id
+        this.startSSE(id);
+
         return this.documentService.getDraftDocumentById(id).pipe(
           tap(document => {this.currentDoc = document}),
           finalize(() => (this.loading = false))
         );
       })
     );
+  }
+
+  ngOnDestroy() {
+    this.closeSSE?.();
+  }
+
+  private async startSSE(documentId: string) {
+    //close the old stream first if route changes to another doc
+    this.closeSSE?.();
+
+    const token = await keycloakAuth.getAccessToken();
+    if(!token) return; //not logged in
+
+    this.closeSSE = this.eventService.connectToDocEvents(documentId, token, {
+      //We refethc full draft on any event
+      onContent: () => this.refreshDraft(documentId),
+       onType: () => this.refreshDraft(documentId),
+       onReorder: () => this.refreshDraft(documentId),
+       onAdded: () => this.refreshDraft(documentId),
+      onRemoved: () => this.refreshDraft(documentId)
+    });
+  }
+
+  private refreshDraft(documentId: string) {
+    this.documentService.getDraftDocumentById(documentId).subscribe({
+      next: doc => {
+        this.currentDoc = doc;
+      },
+      error: () => {
+        this.alertService.error('Failed to refresh document');
+      }
+    });
   }
 
   //Change content

@@ -6,8 +6,8 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   if (keycloakAuth.isAuthenticated()) return true;
+//start login and cancel current navigation
+  void keycloakAuth.login(window.location.origin + state.url);
 
- /* void keycloakAuth.login(window.location.origin + state.url)
-    .catch(() => router.navigate(['/'])); // login failure => home redirection*/
-  return false;
+  return router.parseUrl('/');
 };

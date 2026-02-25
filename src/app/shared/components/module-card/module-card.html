@@ -1,9 +1,12 @@
   <div class="module-card" (click)="navigate()"
-       [ngStyle]="{ 'background-image': 'url(' + image + ')' }"
+       [ngStyle]="bgStyle"
         data-aos="fade-up">
 
     <div class="overlay">
       <h2>{{ title }}</h2>
     </div>
+  </div>
+  <div style="border:2px solid red; height:220px">
+    TEXT: {{ title }}
   </div>
 
