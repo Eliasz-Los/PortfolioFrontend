@@ -1,8 +1,8 @@
 .module-card {
 /*  width: 100%;
   max-width: 360px;*/
-  width: 360px;
-  height: 220px;
+  max-width: 360px;
+  max-height: 220px;
   border-radius: 20px;
   background-size: cover;
   background-position: center;

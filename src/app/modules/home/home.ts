@@ -23,7 +23,7 @@ export class Home {
     },
     {
       title: 'DocuGroup',
-      image: '/brainempty.gif',
+      image: '/docugroup/docugroup.jpg',
       route: '/docugroup'
     }
     ];

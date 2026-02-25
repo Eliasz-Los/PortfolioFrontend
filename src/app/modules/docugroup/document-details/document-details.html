@@ -1,0 +1,38 @@
+@if(loading){
+    <app-loading message="Loading document details..."></app-loading>
+}
+
+@if (groupDocument$ | async; as groupDocument) {
+    <div class="document-details">
+        <h2 class="text-center">{{ groupDocument.title }}</h2>
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-primary mb-3 p-3 mx-2"
+              (click)="openAddModal()"
+              title="Add a new component to the document">
+          <i class="bi bi-plus-lg me-1"></i>
+        </button>
+      </div>
+
+      <app-add-component-modal
+      [open]="isAddModalOpen"
+      (close)="closeAddModal()"
+      (create)="addComponent($event)">
+      </app-add-component-modal>
+
+      <div cdkDropList (cdkDropListDropped)="drop($event)">
+        @if (currentDoc; as doc) {
+
+          @for (component of doc.components; track component.id) {
+            <app-doc-component
+              [draftComponent]="component"
+              (saveContent)="onSaveComponentContent($event)"
+              (changeType)="onChangeComponentType($event)"
+              (delete)="deleteComponent($event)"></app-doc-component>
+          }
+        }
+      </div>
+
+    </div>
+} @else {
+    <p class="text-muted">Document not found.</p>
+}

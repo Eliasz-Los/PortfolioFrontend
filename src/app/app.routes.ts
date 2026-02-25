@@ -14,6 +14,7 @@ import {AddDoctor} from './modules/hospital/doctors-management/add-doctor/add-do
 import {authGuard} from './core/guards/auth.guard';
 import {Docugroup} from './modules/docugroup/docugroup';
 import {Account} from './modules/account/account';
+import {DocumentDetails} from './modules/docugroup/document-details/document-details';
 
 export const routes: Routes = [
   {path:'', component: Home, pathMatch: 'full'},
@@ -29,5 +30,6 @@ export const routes: Routes = [
   {path: 'hospital/doctors/:id', component: DoctorDetails, pathMatch: 'full'},
   {path: 'hospital/appointments', component: AppointmentScheduler, pathMatch: 'full'},
   {path: 'docugroup', component: Docugroup, canActivate: [authGuard], pathMatch: 'full'},
+  {path: 'docugroup/:id', component: DocumentDetails, canActivate: [authGuard], pathMatch: 'full'},
   {path: 'account', component: Account, canActivate: [authGuard], pathMatch: 'full'},
 ];

@@ -1,0 +1,63 @@
+<div
+  class="doc-card"
+  [ngClass]="typeClass"
+  cdkDrag
+>
+  <div class="header d-flex align-items-center">
+    <span class="order">#{{ draftComponent.order }}</span>
+    <span class="type ms-2">{{ draftComponent.componentType }}</span>
+
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <select
+        class="form-select form-select-sm w-auto"
+        aria-label="select component type"
+        [(ngModel)]="selectedType"
+        (ngModelChange)="changeTypeComp($event)">
+          <option value="title" [ngValue]="ComponentType.Title">Title</option>
+          <option value="paragraph" [ngValue]="ComponentType.Paragraph">Paragraph</option>
+          <option value="question" [ngValue]="ComponentType.Question">Question</option>
+          <option value="image" [ngValue]="ComponentType.Image">Image</option>
+      </select>
+
+      @if (!editing){
+        <button
+          class="btn btn-sm btn-outline-primary ms-auto"
+          (click)="startEditing(); $event.stopPropagation()"
+          title="Edit component">
+          <i class="bi bi-pencil"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-danger"
+                (click)="deleteComp(); $event.stopPropagation()"
+                title="Delete component">
+          <i class="bi bi-trash"></i>
+        </button>
+      }
+    </div>
+
+
+  </div>
+
+  <div class="body">
+    <!-- READ MODE -->
+    @if (!editing){
+      <div>
+        {{ draftComponent.lastPublishedContentJson }}
+      </div>
+    } @else {
+      <!--Edit mode-->
+      <div>
+        <textarea
+          class="form-control"
+          rows="4"
+          [(ngModel)]="editContent">
+      </textarea>
+
+        <div class="mt-2 d-flex gap-2">
+          <button class="btn btn-primary btn-sm" (click)="saveContentComp()">Save</button>
+          <button class="btn btn-outline-secondary btn-sm" (click)="cancelEditing()">Cancel</button>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

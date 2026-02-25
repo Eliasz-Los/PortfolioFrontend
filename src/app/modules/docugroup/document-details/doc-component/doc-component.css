@@ -1,0 +1,53 @@
+.doc-card {
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #e2e2e2;
+  background: white;
+  cursor: grab;
+  transition: all 0.2s ease;
+}
+
+.doc-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.order {
+  font-weight: 600;
+}
+
+.type {
+  margin-left: 10px;
+}
+
+/* TYPES */
+
+/* TITLE */
+.type-title .body {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* PARAGRAPH */
+.type-paragraph .body {
+  font-size: 15px;
+}
+
+/* QUESTION */
+.type-question {
+  background-color: #e8f4ff;
+  border-left: 4px solid #2196f3;
+}
+
+.type-question .body {
+  font-weight: 500;
+}

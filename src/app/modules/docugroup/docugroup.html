@@ -1,1 +1,93 @@
-<p>docugroup works!</p>
+<div class="container my-4">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <div class="d-flex align-items-center w-100">
+        <h5 class="flex-grow-1 text-center mb-0">DocuGroup – Documents</h5>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <form class="row g-2 align-items-end" (ngSubmit)="addDocument()">
+        <div class="col-12 col-md-8">
+          <label class="form-label" for="docTitle">Title</label>
+          <input
+            id="docTitle"
+            type="text"
+            class="form-control"
+            placeholder="New document title"
+            [formControl]="titleControl"
+          />
+          @if (titleControl.touched && titleControl.invalid) {
+            <div class="text-danger small mt-1">Title is required (min 2 chars).</div>
+          }
+        </div>
+
+        <div class="col-12 col-md-4 d-flex gap-2">
+          <button class="btn btn-primary" type="submit" [disabled]="isSaving"
+          title="Add document">
+            <i class="bi bi-plus-lg me-1"></i>
+          </button>
+
+          <button class="btn btn-outline-secondary" type="button" (click)="refresh()"
+          title="Refresh documents list">
+            <i class="bi bi-arrow-clockwise me-1"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th style="width: 40%">Title</th>
+            <th>Created (UTC)</th>
+            <th style="width: 120px" class="text-end">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @if (documents$ | async; as documents) {
+            @if (documents.length === 0) {
+              <tr>
+                <td colspan="3" class="text-center text-muted py-4">
+                  No documents yet. Create your first one above.
+                </td>
+              </tr>
+            } @else {
+              @for (doc of documents; track doc.id) {
+                <tr>
+                  <td>{{ doc.title }}</td>
+                  <td>{{ doc.createdAtUtc }}</td>
+                  <td class="text-end">
+
+                    <button
+                      class="btn btn-sm btn-outline-primary"
+                      type="button"
+                      title="View the document"
+                      (click)="viewDocument(doc.id)"
+                    >
+                      <i class="bi bi-eye"></i>
+                    </button>
+
+                    <button
+                      class="btn btn-sm btn-outline-danger"
+                      type="button"
+                      title="Delete"
+                      [disabled]="isDeleting"
+                      (click)="deleteDocument(doc.id)"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              }
+            }
+          } @else {
+            <app-loading></app-loading>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+@if (open) {
+  <!-- Backdrop -->
+  <div class="modal-backdrop fade show"></div>
+
+  <!-- Modal -->
+  <div class="modal fade show d-block" tabindex="-1" role="dialog" (click)="onClose()">
+    <div class="modal-dialog" role="document" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create a new component</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="onClose()"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Component Type</label>
+            <select class="form-select" [formControl]="type">
+              <option [ngValue]="ComponentType.Title">Title</option>
+              <option [ngValue]="ComponentType.Paragraph">Paragraph</option>
+              <option [ngValue]="ComponentType.Question">Question</option>
+              <option [ngValue]="ComponentType.Image">Image</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Content</label>
+            <textarea class="form-control" rows="4" [formControl]="content"></textarea>
+            @if (content.touched && content.invalid) {
+              <div class="text-danger small mt-1">Content is required.</div>
+            }
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="onClose()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="submit()">Add Component</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
