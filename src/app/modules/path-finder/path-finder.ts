@@ -1,13 +1,14 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {NgStyle} from '@angular/common';
+import {NgOptimizedImage, NgStyle} from '@angular/common';
 import {Floorplan} from '../../core/models/pathfinder/Floorplan';
 import {PathfinderService} from '../../core/services/pathfinder.service';
 import {Router} from '@angular/router';
 import {FloorplanViewerComponent} from './floorplan-viewer/floorplan-viewer';
+import {LoadingComponent} from '../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-path-finder',
-  imports: [ FloorplanViewerComponent],
+  imports: [FloorplanViewerComponent, NgOptimizedImage, LoadingComponent],
   templateUrl: './path-finder.html',
   styleUrl: './path-finder.css'
 })

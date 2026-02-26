@@ -1,12 +1,13 @@
 import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
-import {NgStyle} from '@angular/common';
+import {NgOptimizedImage, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-module-card',
   standalone: true,
   imports: [
-    NgStyle
+    NgStyle,
+    NgOptimizedImage
   ],
   templateUrl: './module-card.html',
   styleUrl: './module-card.css'
@@ -22,7 +23,10 @@ export class ModuleCardComponent {
     this.router.navigate([this.route]);
   }
 
-  get bgStyle() {
-    return { 'background-image': `url("${this.image}")` };
+  get bgUrl(): string | null {
+    if (!this.image) return null;
+    return this.image.startsWith('assets/')
+      ? '/' + this.image
+      : this.image;
   }
 }

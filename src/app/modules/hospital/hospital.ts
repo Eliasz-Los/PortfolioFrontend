@@ -14,17 +14,17 @@ export class Hospital {
   modules = [
     {
       title: 'Patient Management',
-      image: '/hospital/patients-module.jpg',
+      image: 'assets/hospital/patients-module.jpg',
       route: '/hospital/patients'
     },
     {
       title: 'Doctor Management',
-      image: '/hospital/doctors-module.jpg',
+      image: 'assets/hospital/doctors-module.jpg',
       route: '/hospital/doctors'
     },
     {
       title: 'Appointment Scheduling',
-      image: '/hospital/appointments-module.jpg',
+      image: 'assets/hospital/appointments-module.jpg',
       route: '/hospital/appointments'
     }
 

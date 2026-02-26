@@ -1,0 +1,35 @@
+.floorplan-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  background: white;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.floorplan-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.floorplan-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.floorplan-card h5 {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.floorplan-card p {
+  margin-top: auto; /* pushes scale to bottom */
+  font-size: 0.9rem;
+  color: #666;
+}

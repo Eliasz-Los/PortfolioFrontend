@@ -1,5 +1,5 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {NgStyle} from '@angular/common';
+import {NgOptimizedImage, NgStyle} from '@angular/common';
 import {Floorplan} from '../../../core/models/pathfinder/Floorplan';
 import {Point} from '../../../core/models/pathfinder/Point';
 import {PathfinderService} from '../../../core/services/pathfinder.service';
@@ -10,7 +10,7 @@ import {AlertService} from '../../../core/services/alert.service';
 
 @Component({
   selector: 'floorplan-viewer',
-  imports: [NgStyle, LoadingComponent],
+  imports: [NgStyle, LoadingComponent, NgOptimizedImage],
   templateUrl: './floorplan-viewer.html',
   styleUrl: './floorplan-viewer.css'
 })
