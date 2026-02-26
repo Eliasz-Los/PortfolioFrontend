@@ -20,12 +20,12 @@
       </app-add-component-modal>
 
       <div cdkDropList (cdkDropListDropped)="drop($event)">
-        @if (currentDoc; as doc) {
+        @if (groupDocument; as doc) {
 
           @for (component of doc.components; track component.id) {
             <app-doc-component
               [draftComponent]="component"
-              (saveContent)="onSaveComponentContent($event)"
+              (saveContent)="onChangeComponentContent($event)"
               (changeType)="onChangeComponentType($event)"
               (delete)="deleteComponent($event)"></app-doc-component>
           }

@@ -12,7 +12,7 @@ import {DocumentService} from '../../../core/services/docugroup/document.service
 import {ComponentService} from '../../../core/services/docugroup/component.service';
 import {AlertService} from '../../../core/services/alert.service';
 import {ActivatedRoute} from '@angular/router';
-import {finalize, Observable, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, finalize, forkJoin, map, Observable, switchMap, tap} from 'rxjs';
 import {DraftDocument} from '../../../core/models/docugroup/draft/DraftDocument';
 import {AsyncPipe} from '@angular/common';
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
@@ -26,6 +26,7 @@ import {AddComponentDto} from '../../../core/models/docugroup/doc-components/Add
 import {AddComponentModal} from './add-component-modal/add-component-modal';
 import {EventService} from '../../../core/services/docugroup/event.service';
 import {keycloakAuth} from '../../../core/services/auth/KeycloakAuthService';
+import {DraftComponent} from '../../../core/models/docugroup/draft/DraftComponent';
 
 
 @Component({
@@ -41,10 +42,10 @@ import {keycloakAuth} from '../../../core/services/auth/KeycloakAuthService';
   styleUrl: './document-details.css'
 })
 export class DocumentDetails implements OnInit, OnDestroy{
-  groupDocument$: Observable<DraftDocument> = new Observable<DraftDocument>();
+  private docSubject = new BehaviorSubject<DraftDocument | null>(null);
+  groupDocument$ = this.docSubject.asObservable();
   loading: boolean = true;
   saving: boolean = false;
-  currentDoc: DraftDocument | null = null;//purely for the reorder UI
   isAddModalOpen =false;
   //SSE
   private closeSSE?: () => void;
@@ -58,20 +59,23 @@ export class DocumentDetails implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.groupDocument$ = this.route.paramMap.pipe(
-      switchMap(params => {
-        const id = params.get('id')!;
+   this.route.paramMap.pipe(
+      map(p => p.get('id')!),
+      switchMap(id => {
         this.loading = true;
-
         //Connect SSE once we know the doc id
         this.startSSE(id);
 
         return this.documentService.getDraftDocumentById(id).pipe(
-          tap(document => {this.currentDoc = document}),
+          tap(document => {
+            console.log('DOC keys', Object.keys(document as any));
+            console.log('Has components?', (document as any).components);
+            this.docSubject.next(document);
+          }),
           finalize(() => (this.loading = false))
         );
       })
-    );
+    ).subscribe();
   }
 
   ngOnDestroy() {
@@ -87,18 +91,21 @@ export class DocumentDetails implements OnInit, OnDestroy{
 
     this.closeSSE = this.eventService.connectToDocEvents(documentId, token, {
       //We refethc full draft on any event
-      onContent: () => this.refreshDraft(documentId),
-       onType: () => this.refreshDraft(documentId),
-       onReorder: () => this.refreshDraft(documentId),
-       onAdded: () => this.refreshDraft(documentId),
-      onRemoved: () => this.refreshDraft(documentId)
+      onContent: payload => this.applyContentChange(payload),
+       onType: payload => {
+        console.log("SSE type change", payload);
+        this.applyTypeChange(payload);
+       },
+       onReorder: payload => this.applyReorder(payload),
+       onAdded: payload => this.applyAdd(payload),
+      onRemoved: payload => this.applyRemove(payload)
     });
   }
 
   private refreshDraft(documentId: string) {
     this.documentService.getDraftDocumentById(documentId).subscribe({
       next: doc => {
-        this.currentDoc = doc;
+        this.docSubject.next(doc)
       },
       error: () => {
         this.alertService.error('Failed to refresh document');
@@ -107,15 +114,15 @@ export class DocumentDetails implements OnInit, OnDestroy{
   }
 
   //Change content
-  onSaveComponentContent(change: { id: string; content: string }): void {
-    if (!this.currentDoc) return;
+  onChangeComponentContent(change: { id: string; content: string }): void {
+    if (!this.docSubject.value) return;
 
     this.saving = true;
 
     const comp: ChangeContentComponentDto={
       id: change.id,
       lastPublishedContentJson: change.content,
-      groupDocumentId: this.currentDoc.id
+      groupDocumentId: this.docSubject.value.id
     }
 
     this.componentService.changeContent(comp).pipe(
@@ -130,14 +137,29 @@ export class DocumentDetails implements OnInit, OnDestroy{
     });
   }
 
+  //Patch handler for content changes from SSE (only updates the content of the affected component, not the whole doc)
+  private applyContentChange(payload: any): void {
+    const doc = this.docSubject.value;
+    if (!doc) return;
+    const {id, lastPublishedContentJson} = payload;
+    const compId = doc.components.findIndex(c => c.id === id);
+    if (compId < 0) return;
+
+    const updatedComp = {
+      ...doc,
+      components: doc.components.map(c => c.id === id ? {...c, lastPublishedContentJson} : c)
+    };
+    this.docSubject.next(updatedComp);
+  }
+
   //Change type
   onChangeComponentType(type: {id: string, newType: ComponentType}): void {
-    if (!this.currentDoc) return;
+    if (!this.docSubject.value) return;
 
     this.saving = true;
     const comp: ChangeTypeComponentDto={
       id: type.id,
-      groupDocumentId: this.currentDoc.id,
+      groupDocumentId: this.docSubject.value.id,
       type: type.newType,
       clearLastPublishedContent: true
     }
@@ -149,47 +171,70 @@ export class DocumentDetails implements OnInit, OnDestroy{
         this.alertService.success('Component type updated successfully');
       },
       error: () => {
-        this.alertService.error('Failed to update component type');
+        this.alertService.warning('Failed to update component type. Try again!');
       }
     });
   }
 
+  //Patch handler for the Type changes from SSE
+  private applyTypeChange(payload: any): void {
+    const doc = this.docSubject.value;
+    if (!doc) return;
+
+    const { id, type } = payload;
+
+    const updated = {
+      ...doc,
+      components: doc.components.map(c =>
+        c.id === id ? { ...c, componentType: type } : c
+      )
+    };
+
+    this.docSubject.next(updated);
+  }
+
   //Reorder
   drop(event: CdkDragDrop<any>) {
-    if (!this.currentDoc) return;
+    const doc = this.docSubject.value;
+    if (!doc) return;
 
-    moveItemInArray(this.currentDoc.components, event.previousIndex, event.currentIndex);
+    const components = [...doc.components];
+    moveItemInArray(components, event.previousIndex, event.currentIndex);
 
-    // persist new orders (1..n) using your backend reorder endpoint
+    // update UI immediately
+    const updatedDoc = { ...doc, components };
+    this.docSubject.next(updatedDoc);
+
+    // persist
     this.saving = true;
-    const calls = this.currentDoc.components.map((c, index) =>
+    const calls = components.map((c, index) =>
       this.componentService.reorderComponent({
-        groupDocumentId: this.currentDoc!.id,
+        groupDocumentId: doc.id,
         id: c.id,
         newOrder: index + 1
       })
     );
 
-    // simplest: fire sequentially by subscribing each (works). Better: forkJoin (also works).
-    // If you already use RxJS forkJoin:
-    // forkJoin(calls).pipe(finalize(() => this.saving = false)).subscribe(...)
+    // Better than manual counting:
+    forkJoin(calls)
+      .pipe(finalize(() => (this.saving = false)))
+      .subscribe({
+        next: () => this.alertService.success('Reordered.'),
+        error: () => this.alertService.warning('Failed to reorder.')
+      });
+  }
+  private applyReorder(payload: any) {
+    const doc = this.docSubject.value;
+    if (!doc) return;
 
-    let done = 0;
-    calls.forEach(req =>
-      req.subscribe({
-        next: () => {
-          done++;
-          if (done === calls.length) {
-            this.saving = false;
-            this.alertService.success('Reordered.');
-          }
-        },
-        error: () => {
-          this.saving = false;
-          this.alertService.error('Failed to reorder.');
-        }
-      })
-    );
+    const id = payload.id;
+    const newOrder = payload.newOrder;
+
+    const updatedComponents = doc.components
+      .map(c => c.id === id ? { ...c, order: newOrder } : c)
+      .sort((a, b) => a.order - b.order);
+
+    this.docSubject.next({ ...doc, components: updatedComponents });
   }
 
   // Add component
@@ -200,10 +245,10 @@ export class DocumentDetails implements OnInit, OnDestroy{
     this.isAddModalOpen = false;
   }
   addComponent(e:{content:string; type:ComponentType}): void {
-    if (!this.currentDoc) return;
+    if (!this.docSubject.value) return;
     const dto: AddComponentDto = {
       componentType: e.type,
-      groupDocumentId: this.currentDoc.id,
+      groupDocumentId: this.docSubject.value.id,
       lastPublishedContentJson: e.content
     }
 
@@ -220,16 +265,27 @@ export class DocumentDetails implements OnInit, OnDestroy{
       }
     });
   }
+  private applyAdd(payload: any) {
+    const doc = this.docSubject.value;
+    if (!doc) return;
+    const  newComp : DraftComponent = payload;
 
+    const updated = {
+      ...doc,
+      components: [...doc.components, newComp]
+    };
+
+    this.docSubject.next(updated);
+  }
   //Delete component
   deleteComponent(id: { id: string }): void {
-    if (!this.currentDoc) return;
+    if (!this.docSubject.value) return;
     const ok = window.confirm('Delete this component?');
     //TODO - replace with custom confirmation dialog
     if (!ok) return;
 
     this.saving = true;
-    this.componentService.removeComponent(this.currentDoc.id, id.id).pipe(
+    this.componentService.removeComponent(this.docSubject.value.id, id.id).pipe(
       finalize(() => (this.saving = false))
     ).subscribe({
       next: () => {
@@ -240,7 +296,16 @@ export class DocumentDetails implements OnInit, OnDestroy{
       }
     });
   }
+  private applyRemove(payload: any) {
+    const doc = this.docSubject.value;
+    if (!doc) return;
 
+    const id = payload.id ?? payload.componentId;
+    if (!id) return;
 
-  protected readonly AddComponentModal = AddComponentModal;
+    this.docSubject.next({
+      ...doc,
+      components: doc.components.filter(c => c.id !== id)
+    });
+  }
 }

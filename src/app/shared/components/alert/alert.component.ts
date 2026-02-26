@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Alert } from '../../../core/models/Alert';
 import {AlertService} from '../../../core/services/alert.service';
 import {NgClass} from '@angular/common';
@@ -12,7 +12,7 @@ import {NgClass} from '@angular/common';
   templateUrl: './alert.component.html',
   styleUrl: './alert.component.css'
 })
-export class AlertComponent {
+export class AlertComponent implements OnInit {
   alert: Alert | null = null;
 
   constructor(private alertService: AlertService) {}
@@ -20,10 +20,11 @@ export class AlertComponent {
   ngOnInit(): void {
     this.alertService.alert$.subscribe(alert => {
       this.alert = alert;
+      setTimeout(() => this.close(), 4000);
 
-      if (alert?.type === 'success') {
+      /*if (alert?.type === 'success') {
         setTimeout(() => this.close(), 4000);
-      }
+      }*/
     });
   }
 
