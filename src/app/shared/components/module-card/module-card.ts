@@ -5,10 +5,7 @@ import {NgOptimizedImage, NgStyle} from '@angular/common';
 @Component({
   selector: 'app-module-card',
   standalone: true,
-  imports: [
-    NgStyle,
-    NgOptimizedImage
-  ],
+  imports: [],
   templateUrl: './module-card.html',
   styleUrl: './module-card.css'
 })

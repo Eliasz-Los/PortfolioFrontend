@@ -40,9 +40,9 @@
       <table class="table table-hover align-middle mb-0">
         <thead class="table-light">
           <tr>
-            <th style="width: 40%">Title</th>
+            <th>Title</th>
             <th>Created (UTC)</th>
-            <th style="width: 120px" class="text-end">Actions</th>
+            <th class="text-end">Actions</th>
           </tr>
         </thead>
 
@@ -58,8 +58,21 @@
               @for (doc of documents; track doc.id) {
                 <tr>
                   <td>{{ doc.title }}</td>
-                  <td>{{ doc.createdAtUtc }}</td>
-                  <td class="text-end">
+                  <td>{{ formatDate(doc.createdAtUtc, 'dd-MM-yyyy hh:mm:ss', 'en-GB') }}</td>
+                  <td class="text-end d-flex gap-2 justify-content-end">
+                    <button class="btn btn-sm btn-outline-secondary"
+                      type="button"
+                      title="Share this document with others"
+                      (click)="shareDocument(doc.id)">
+                      <i class="bi bi-share"></i>
+                    </button>
+
+                    <button class="btn btn-sm btn-outline-dark"
+                            type="button"
+                            title="Export as PDF"
+                            (click)="exportDocumentAsPdf(doc.id)">
+                      <i class="bi bi-file-pdf"></i>
+                    </button>
 
                     <button
                       class="btn btn-sm btn-outline-primary"

@@ -8,7 +8,7 @@ import {LoadingComponent} from '../../shared/components/loading/loading.componen
 
 @Component({
   selector: 'app-path-finder',
-  imports: [FloorplanViewerComponent, NgOptimizedImage, LoadingComponent],
+  imports: [FloorplanViewerComponent, LoadingComponent],
   templateUrl: './path-finder.html',
   styleUrl: './path-finder.css'
 })

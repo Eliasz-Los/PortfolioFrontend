@@ -4,9 +4,7 @@ import {UseAuth} from '../../core/services/auth/useAuth';
 
 @Component({
   selector: 'app-account',
-  imports: [
-    JsonPipe
-  ],
+  imports: [],
   templateUrl: './account.html',
   styleUrl: './account.css'
 })

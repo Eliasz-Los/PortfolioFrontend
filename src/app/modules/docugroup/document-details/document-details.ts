@@ -11,7 +11,7 @@ import {
 import {DocumentService} from '../../../core/services/docugroup/document.service';
 import {ComponentService} from '../../../core/services/docugroup/component.service';
 import {AlertService} from '../../../core/services/alert.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, finalize, forkJoin, map, Observable, switchMap, tap} from 'rxjs';
 import {DraftDocument} from '../../../core/models/docugroup/draft/DraftDocument';
 import {AsyncPipe} from '@angular/common';
@@ -27,6 +27,7 @@ import {AddComponentModal} from './add-component-modal/add-component-modal';
 import {EventService} from '../../../core/services/docugroup/event.service';
 import {keycloakAuth} from '../../../core/services/auth/KeycloakAuthService';
 import {DraftComponent} from '../../../core/models/docugroup/draft/DraftComponent';
+import {PublishDto} from '../../../core/models/docugroup/document/PublishDto';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class DocumentDetails implements OnInit, OnDestroy{
               private componentService: ComponentService,
               private alertService: AlertService,
               private route: ActivatedRoute,
+              private router: Router,
               private eventService: EventService) {
 
   }
@@ -129,7 +131,7 @@ export class DocumentDetails implements OnInit, OnDestroy{
       finalize(() => (this.saving = false))
     ).subscribe({
       next: () => {
-        this.alertService.success('Component content updated successfully');
+        this.alertService.info('Component content updated successfully');
       },
       error: () => {
         this.alertService.error('Failed to update component content');
@@ -219,7 +221,7 @@ export class DocumentDetails implements OnInit, OnDestroy{
     forkJoin(calls)
       .pipe(finalize(() => (this.saving = false)))
       .subscribe({
-        next: () => this.alertService.success('Reordered.'),
+        next: () => this.alertService.info('Reordered.'),
         error: () => this.alertService.warning('Failed to reorder.')
       });
   }
@@ -257,7 +259,7 @@ export class DocumentDetails implements OnInit, OnDestroy{
       finalize(() => (this.saving = false))
     ).subscribe({
       next: () => {
-        this.alertService.success('Component added.');
+        this.alertService.info('Component added.');
         this.closeAddModal();
       },
       error: () => {
@@ -289,7 +291,7 @@ export class DocumentDetails implements OnInit, OnDestroy{
       finalize(() => (this.saving = false))
     ).subscribe({
       next: () => {
-        this.alertService.success('Component deleted.');
+        this.alertService.info('Component deleted.');
       },
       error: () => {
         this.alertService.error('Failed to delete component.');
@@ -307,5 +309,36 @@ export class DocumentDetails implements OnInit, OnDestroy{
       ...doc,
       components: doc.components.filter(c => c.id !== id)
     });
+  }
+
+
+  //Publish document
+  publishDocument(): void {
+    if(!this.docSubject.value)
+      return this.alertService.error('Failed to publish document, the document in this has no values like ID and OR Title');
+
+    const dto: PublishDto = {
+      id: this.docSubject.value.id,
+      title: this.docSubject.value.title,
+    }
+    this.saving = true;
+    this.documentService.publishDocument(dto).pipe(
+      finalize(() => (this.saving = false))
+    ).subscribe({
+      next: () => {
+        this.alertService.success('Document published.');
+        //Optionally, we could refresh the draft to get the new published content, but it should be the same
+        //this.refreshDraft(dto.documentId);
+      },
+      error: () => {
+        this.alertService.error('Failed to publish document. Try again!');
+      }
+    });
+  }
+
+
+  //Navigate back to the list
+  navigateBack(): void {
+    this.router.navigate(['docugroup']);
   }
 }

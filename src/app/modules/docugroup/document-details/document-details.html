@@ -3,15 +3,35 @@
 }
 
 @if (groupDocument$ | async; as groupDocument) {
-    <div class="document-details">
+    <div class="container document-details">
         <h2 class="text-center">{{ groupDocument.title }}</h2>
-      <div class="d-flex justify-content-end">
-        <button class="btn btn-primary mb-3 p-3 mx-2"
-              (click)="openAddModal()"
-              title="Add a new component to the document">
-          <i class="bi bi-plus-lg me-1"></i>
-        </button>
+      <div class="row">
+        <div class="col-12  d-flex justify-content-between align-items-center mx-2">
+         <div class="">
+           <button class="btn btn-outline-secondary mb-3 p-3"
+                   type="button" (click)="navigateBack()"
+                   title="Go back to the documents list">
+             <i class="bi bi-arrow-left me-1"></i>
+           </button>
+         </div>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary mb-3 p-3"
+                  type="button" (click)="openAddModal()"
+                  title="Add a new component to the document">
+            <i class="bi bi-file-earmark-plus me-1"></i>
+          </button>
+          <button class="btn btn-success mb-3 p-3"
+                  type="button" (click)="publishDocument()"
+                  title="Publish and save the document changes in the database">
+            <i class="bi bi-save me-1"></i>
+          </button>
+        </div>
+
+        </div>
+
       </div>
+
 
       <app-add-component-modal
       [open]="isAddModalOpen"

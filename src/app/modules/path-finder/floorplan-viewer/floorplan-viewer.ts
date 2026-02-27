@@ -10,7 +10,7 @@ import {AlertService} from '../../../core/services/alert.service';
 
 @Component({
   selector: 'floorplan-viewer',
-  imports: [NgStyle, LoadingComponent, NgOptimizedImage],
+  imports: [NgStyle, LoadingComponent],
   templateUrl: './floorplan-viewer.html',
   styleUrl: './floorplan-viewer.css'
 })

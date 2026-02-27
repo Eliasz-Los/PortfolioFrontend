@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, formatDate} from '@angular/common';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {BehaviorSubject, Observable, finalize, switchMap} from 'rxjs';
 
@@ -90,4 +90,17 @@ export class Docugroup {
     this.router.navigate(['docugroup', id]);
   }
 
+  shareDocument(id: string) {
+   console.log('Share document', id);
+   //TODO - implement sharing functionality
+   this.alerts.info('Sharing functionality not implemented yet.');
+  }
+
+  exportDocumentAsPdf(id: string) {
+    console.log('Export document as PDF', id);
+    //TODO - implement export functionality
+    this.alerts.info('Export functionality not implemented yet.');
+  }
+
+  protected readonly formatDate = formatDate;
 }
